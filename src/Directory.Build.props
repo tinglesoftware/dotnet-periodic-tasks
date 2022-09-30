@@ -1,0 +1,46 @@
+<Project>
+  <!-- Chain up to the next file (can be copy-pasted to either Directory.Build.props or Directory.Build.targets) -->
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., '$(MSBuildThisFileName)$(MSBuildThisFileExtension)'))\$(MSBuildThisFileName)$(MSBuildThisFileExtension)" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Deterministic>true</Deterministic>
+    <!--<IsPackable>true</IsPackable>-->
+    <Company>Tingle Software</Company>
+    <Authors>Tingle Software</Authors>
+    <PackageTags>$(PackageTags);dotnet;netstandard</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--  Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix Condition="'$(GITVERSION_NUGETVERSION)' != ''">$(GITVERSION_NUGETVERSION)</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      This packages is necessary to use Use C# 9's init and record features in in older target frameworks.
+      https://github.com/manuelroemer/IsExternalInit
+    -->
+    <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

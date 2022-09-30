@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Basic implementation of periodic tasks in .NET.</Description>
+    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tingle.PeriodicTasks.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cronos" Version="0.7.1" />
+    <PackageReference Include="DistributedLock.Core" Version="1.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Polly" Version="7.2.3" />
+  </ItemGroup>
+
+</Project>

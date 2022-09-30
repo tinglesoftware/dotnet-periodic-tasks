@@ -1,0 +1,23 @@
+<Project>
+  <!-- Chain up to the next file (can be copy-pasted to either Directory.Build.props or Directory.Build.targets) -->
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., '$(MSBuildThisFileName)$(MSBuildThisFileExtension)'))\$(MSBuildThisFileName)$(MSBuildThisFileExtension)" />
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.analyzers" Version="1.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+</Project>
