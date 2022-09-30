@@ -41,7 +41,7 @@ jobs:
         useConfigFile: true
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
           6.x
@@ -90,7 +90,7 @@ jobs:
         path: ${{ github.workspace }}/drop
 
     - name: Setup .NET 6 SDK
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.x'
         source-url: ${{ secrets.PRIVATE_FEED_URL }}
@@ -116,7 +116,7 @@ jobs:
         path: ${{ github.workspace }}/drop
 
     - name: Setup .NET 6.0 SDK
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.x'
         source-url: https://api.nuget.org/v3/index.json
