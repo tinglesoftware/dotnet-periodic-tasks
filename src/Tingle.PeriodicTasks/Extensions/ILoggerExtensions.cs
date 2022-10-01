@@ -15,10 +15,10 @@ internal static partial class ILoggerExtensions
     public static partial void TaskNotEnabled(this ILogger logger, string taskName);
 
     [LoggerMessage(202, LogLevel.Error, "Unable to get the next occurrence for {Expression} in {TimezoneId} used by '{TaskName}'")]
-    public static partial void UnableToGetNextOccurance(this ILogger logger, string expression, string timezoneId, string taskName);
+    public static partial void UnableToGetNextOccurrence(this ILogger logger, string expression, string timezoneId, string taskName);
 
     [LoggerMessage(203, LogLevel.Debug, "Delaying for {DelayReadable} ({Delay}) to the next schedule at {Next} for '{TaskName}'")]
-    public static partial void DelayingToNextOccurance(this ILogger logger, string delayReadable, TimeSpan delay, DateTimeOffset next, string taskName);
+    public static partial void DelayingToNextOccurrence(this ILogger logger, string delayReadable, TimeSpan delay, DateTimeOffset next, string taskName);
 
     [LoggerMessage(204, LogLevel.Warning, "Execution of '{ExecutionId}' reached it's deadline.")]
     public static partial void ExecutionDeadlined(this ILogger logger, string executionId);

@@ -51,7 +51,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
             var next = schedule.GetNextOccurrence(DateTimeOffset.UtcNow, timezone);
             if (next is null)
             {
-                logger.UnableToGetNextOccurance(expression: schedule, timezoneId: timezone.Id, taskName: name);
+                logger.UnableToGetNextOccurrence(expression: schedule, timezoneId: timezone.Id, taskName: name);
                 break;
             }
 
@@ -59,7 +59,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
             var delay = next.Value - DateTimeOffset.UtcNow;
             if (delay > TimeSpan.Zero)
             {
-                logger.DelayingToNextOccurance(delay.ToReadableString(), delay, next.Value, name);
+                logger.DelayingToNextOccurrence(delay.ToReadableString(), delay, next.Value, name);
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
             }
 
