@@ -68,7 +68,10 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
     }
 
-    public async Task ExecuteAsync(string name, CancellationToken cancellationToken)
+    public Task ExecuteAsync(string name, CancellationToken cancellationToken)
+        => ExecuteAsync(name: name, throwOnError: false, cancellationToken: cancellationToken);
+
+    public async Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken)
     {
         var options = optionsMonitor.Get(name);
 
@@ -81,6 +84,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         var t = ExecuteInnerAsync(executionId: id,
                                   name: name,
                                   options: options,
+                                  throwOnError: throwOnError,
                                   cancellationToken: cts.Token);
 
         if (options.AwaitExecution)
@@ -101,7 +105,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
     }
 
-    internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, CancellationToken cancellationToken)
+    internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken)
     {
         using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
         var provider = scope.ServiceProvider;
@@ -144,8 +148,12 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
         catch (Exception ex)
         {
-            logger.ExceptionInPeriodicTask(ex, executionId);
             Interlocked.Exchange(ref caught, ex);
+
+            if (!throwOnError)
+            {
+                logger.ExceptionInPeriodicTask(ex, executionId);
+            }
         }
 
         var end = DateTimeOffset.UtcNow;
@@ -180,6 +188,12 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
             {
                 logger.ExceptionNotifyingSubscribers(ex, executionId);
             }
+        }
+
+        // throw exception if any and if told to
+        if (throwOnError && caught is not null)
+        {
+            throw new PeriodicTaskException($"Exception running {executionId}", caught);
         }
     }
 }
