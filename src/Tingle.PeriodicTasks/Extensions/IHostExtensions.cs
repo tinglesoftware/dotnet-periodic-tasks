@@ -73,6 +73,6 @@ public static class IHostExtensions
         var genericRunnerType = typeof(IPeriodicTaskRunner<>);
         var runnerType = genericRunnerType.MakeGenericType(type);
         var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
-        return runner.ExecuteAsync(name, cts.Token);
+        return runner.ExecuteAsync(name: name, throwOnError: true, cancellationToken: cts.Token);
     }
 }
