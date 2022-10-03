@@ -148,8 +148,12 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
         catch (Exception ex)
         {
-            logger.ExceptionInPeriodicTask(ex, executionId);
             Interlocked.Exchange(ref caught, ex);
+
+            if (!throwOnError)
+            {
+                logger.ExceptionInPeriodicTask(ex, executionId);
+            }
         }
 
         var end = DateTimeOffset.UtcNow;
