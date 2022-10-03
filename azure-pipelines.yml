@@ -18,17 +18,6 @@ schedules:
     include:
       - main
 
-pr:
-  branches:
-    include:
-      - main
-  paths:
-    exclude: # no need to rebuild on changes in documentation
-      - README.md
-      - LICENSE
-      - CHANGELOG.md
-      - docs/**
-
 stages:
 - stage: Build
   variables:
