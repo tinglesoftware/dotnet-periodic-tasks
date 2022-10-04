@@ -20,28 +20,35 @@ public static class IHostExtensions
     {
         if (host is null) throw new ArgumentNullException(nameof(host));
 
-        return host.ShouldExecutePeriodicTask(out var taskName)
+        return host.TryGetPeriodicTaskName(out var taskName)
             ? host.ExecutePeriodicTaskAsync(taskName, cancellationToken)
             : host.RunAsync(cancellationToken);
     }
 
     /// <summary>
-    /// Checks if the host is configured to execute a periodic task rather than run the host.
+    /// Gets the name of the periodic task configured to run on startup, if any.
     /// </summary>
     /// <param name="host">The <see cref="IHost"/> to use.</param>
-    /// <param name="taskName">
-    /// The name of the periodic task to configured to execute. It can be passed uninitialized.
+    /// <param name="name">
+    /// When this method returns, contains the name of the periodic task to run on startup,
+    /// if the configuration key is found with a non-null value; otherwise, the default 
+    /// value for the type of the value parameter.
+    /// This parameter is passed uninitialized.
     /// <br/>
-    /// When the method returns <see langword="true"/>, this value can be used with
+    /// This value can be used with
     /// <see cref="ExecutePeriodicTaskAsync(IHost, string, CancellationToken)"/>.
     /// </param>
-    /// <returns></returns>
-    public static bool ShouldExecutePeriodicTask(this IHost host, [NotNullWhen(true)] out string? taskName)
+    /// <returns>
+    /// <see langword="true"/> if the <see cref="IConfiguration"/> used by the <see cref="IHost"/>
+    /// contains a non-null value for the <c>PERIODIC_TASK_NAME</c> configuration key;
+    /// otherwise <see langword="false"/>.
+    /// </returns>
+    public static bool TryGetPeriodicTaskName(this IHost host, [NotNullWhen(true)] out string? name)
     {
         if (host is null) throw new ArgumentNullException(nameof(host));
 
         var configuration = host.Services.GetRequiredService<IConfiguration>();
-        return (taskName = configuration["PERIODIC_TASK_NAME"] is string s ? s : null) is not null;
+        return configuration.TryGetPeriodicTaskName(out name);
     }
 
     /// <summary>Execute a periodic task.</summary>
