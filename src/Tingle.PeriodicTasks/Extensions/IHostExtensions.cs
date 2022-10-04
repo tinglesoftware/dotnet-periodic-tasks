@@ -41,7 +41,7 @@ public static class IHostExtensions
         if (host is null) throw new ArgumentNullException(nameof(host));
 
         var configuration = host.Services.GetRequiredService<IConfiguration>();
-        return (taskName = configuration["PERIODIC_TASK_NAME"] is string s ? s : null) is not null;
+        return configuration.TryGetPeriodicTaskName(out taskName);
     }
 
     /// <summary>Execute a periodic task.</summary>
