@@ -21,8 +21,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     /// <inheritdoc/>
     public void Configure(string name, PeriodicTaskOptions options)
     {
-        options.Name = name;
-        options.LockName = $"{tasksHostOptions.LockNamePrefix}:{name}";
+        options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
     }
 
     /// <inheritdoc/>
@@ -37,12 +36,6 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
-        }
-
-        // ensure we have a name
-        if (string.IsNullOrWhiteSpace(options.Name))
-        {
-            return ValidateOptionsResult.Fail($"'{nameof(options.Name)}' must be provided.");
         }
 
         // ensure we have a lock name

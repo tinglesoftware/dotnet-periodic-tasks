@@ -63,6 +63,11 @@ public class PeriodicTaskOptions
     public PeriodicTaskIdFormat ExecutionIdFormat { get; set; } = PeriodicTaskIdFormat.GuidNoDashes;
 
     /// <summary>
+    /// The name of the distributed lock to be acquired during execution.
+    /// </summary>
+    public string? LockName { get; set; }
+
+    /// <summary>
     /// The retry policy to apply when executing the job.
     /// This is an outer wrapper around the
     /// <see cref="IPeriodicTask.ExecuteAsync(string, CancellationToken)"/>
@@ -76,7 +81,4 @@ public class PeriodicTaskOptions
     /// until the execution with retry policy completes successfully or not.
     /// </remarks>
     public AsyncRetryPolicy? RetryPolicy { get; set; }
-
-    internal string? Name { get; set; }
-    internal string? LockName { get; set; }
 }

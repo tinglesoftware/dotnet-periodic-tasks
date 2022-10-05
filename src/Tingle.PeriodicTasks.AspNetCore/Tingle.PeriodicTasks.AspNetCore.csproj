@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <Description>Endpoints for accessing periodic tasks built using Tingle.PeriodicTasks libraries</Description>
+    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tingle.PeriodicTasks.AspNetCore.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\Tingle.PeriodicTasks\Tingle.PeriodicTasks.csproj" />
+  </ItemGroup>
+
+</Project>
