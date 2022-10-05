@@ -35,7 +35,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
     private static void ValidateServicesRegistered(IEndpointRouteBuilder endpoints)
     {
-        if (endpoints.ServiceProvider.GetService(typeof(PeriodicTasksEndpointsHandler)) is null)
+        if (endpoints.ServiceProvider.GetService(typeof(PeriodicTasksMarkerService)) is null)
         {
             throw new InvalidOperationException("Unable to find the required services. Please add all the required services by calling " +
                 "'builder.AddAspNetCore' inside the call to 'services.AddPeriodicTasks(...)' in the application startup code.");

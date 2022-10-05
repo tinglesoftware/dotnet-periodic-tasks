@@ -1,4 +1,5 @@
-﻿using Tingle.PeriodicTasks.AspNetCore;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Tingle.PeriodicTasks.AspNetCore;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +28,7 @@ public static class PeriodicTasksBuilderExtensions
         ArgumentNullException.ThrowIfNull(configure);
 
         var services = builder.Services;
+        services.TryAddSingleton<PeriodicTasksMarkerService>();
         services.Configure(configure);
         services.AddScoped<PeriodicTasksEndpointsHandler>();
         services.AddHttpContextAccessor();
