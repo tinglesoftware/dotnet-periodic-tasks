@@ -77,5 +77,8 @@ public class PeriodicTaskOptions
     /// </remarks>
     public AsyncRetryPolicy? RetryPolicy { get; set; }
 
-    internal string? LockName { get; set; }
+    /// <summary>
+    /// The name of the distributed lock to be acquired during execution.
+    /// </summary>
+    public string? LockName { get; set; }
 }

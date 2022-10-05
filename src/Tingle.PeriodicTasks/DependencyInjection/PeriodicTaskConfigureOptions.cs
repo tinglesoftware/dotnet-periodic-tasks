@@ -21,7 +21,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     /// <inheritdoc/>
     public void Configure(string name, PeriodicTaskOptions options)
     {
-        options.LockName = $"{tasksHostOptions.LockNamePrefix}:{name}";
+        options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
     }
 
     /// <inheritdoc/>
