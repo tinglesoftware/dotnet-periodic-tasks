@@ -77,6 +77,5 @@ public class PeriodicTaskOptions
     /// </remarks>
     public AsyncRetryPolicy? RetryPolicy { get; set; }
 
-    internal string? Name { get; set; }
     internal string? LockName { get; set; }
 }
