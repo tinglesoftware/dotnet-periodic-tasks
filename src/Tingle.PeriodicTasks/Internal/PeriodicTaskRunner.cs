@@ -193,7 +193,12 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         // throw exception if any and if told to
         if (throwOnError && caught is not null)
         {
-            throw new PeriodicTaskException($"Exception running {executionId}", caught);
+            throw new PeriodicTaskException($"Exception running {executionId}", caught)
+            {
+                Id = executionId,
+                Name = name,
+                TaskType = typeof(TTask),
+            };
         }
     }
 }

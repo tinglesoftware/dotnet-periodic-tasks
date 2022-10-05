@@ -1,4 +1,4 @@
-﻿namespace Tingle.PeriodicTasks.Internal;
+﻿namespace Tingle.PeriodicTasks;
 
 ///
 public class PeriodicTaskException : Exception
@@ -14,8 +14,11 @@ public class PeriodicTaskException : Exception
     }
 
     ///
-    public Type? TaskType { get; init; }
+    public string? Id { get; internal set; }
 
     ///
-    public PeriodicTaskExecutionAttempt? Attempt { get; init; }
+    public string? Name { get; internal set; }
+
+    ///
+    public Type? TaskType { get; init; }
 }
