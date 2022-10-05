@@ -60,7 +60,7 @@ public class PeriodicTasksBuilder
                 throw new InvalidOperationException($"A task with the name '{name}' has already been registered. Names are case insensitive.");
             }
 
-            opt.Registrations.Add(name, typeof(TTask));
+            opt.AddRegistration(name, typeof(TTask));
         });
 
         Services.Configure(name, configure);

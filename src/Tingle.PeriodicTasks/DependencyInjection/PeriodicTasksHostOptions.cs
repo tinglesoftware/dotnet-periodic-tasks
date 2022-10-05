@@ -1,5 +1,4 @@
-﻿using Medallion.Threading;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Polly.Retry;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.Internal;
@@ -9,6 +8,12 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>Options for <see cref="PeriodicTasksHost"/>.</summary>
 public class PeriodicTasksHostOptions
 {
+    /// Dictionary is used instead of HashSet to ensure the name (key) is never duplicated, case-insensitive.
+    /// Names must be case-insensitive because they are used to form lock names and the underlying distributed
+    /// lock provider may not support case sensitivity.
+    /// For example, using files for locks may fail because file names on Windows are case insensitive.
+    private readonly Dictionary<string, Type> registrations = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>
     /// Gets or sets the prefix value for the lock names.
     /// When not provided <see cref="IHostEnvironment.ApplicationName"/> is used.
@@ -22,15 +27,8 @@ public class PeriodicTasksHostOptions
     /// </summary>
     public AsyncRetryPolicy? DefaultRetryPolicy { get; set; }
 
-    /// <summary>
-    /// </summary>
-    /// <remarks>
-    /// <see cref="Dictionary{TKey, TValue}"/> is used instead of <see cref="HashSet{T}"/>
-    /// to ensure the name (key) is never duplicated, case-insensitive.
-    /// <br/>
-    /// Names must be case-insensitive because they are used to form lock names and the
-    /// underlying <see cref="IDistributedLockProvider"/> may not support case sensitivity.
-    /// For example, using files for locks may fail because file names on Windows are case insensitive.
-    /// </remarks>
-    internal Dictionary<string, Type> Registrations { get; } = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>The periodic tasks registered.</summary>
+    public IReadOnlyDictionary<string, Type> Registrations => registrations;
+
+    internal void AddRegistration(string name, Type type) => registrations.Add(name, type);
 }
