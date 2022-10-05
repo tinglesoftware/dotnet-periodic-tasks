@@ -20,8 +20,8 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
         ValidateServicesRegistered(builder);
 
+        // in .NET 7 use route groups to avoid the prefix?
         prefix = prefix.TrimEnd('/');
-        // in .NET 7 use route groups
         var builders = new[]
         {
             builder.MapGet($"{prefix}/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List()),
@@ -30,7 +30,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
             builder.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteOnDemandAsync(request)),
         };
 
-        return new PeriodicTasksEndpointConventionBuilder(builders);
+        return new PeriodicTasksEndpointConventionBuilder(builders).WithGroupName("periodic-tasks").WithDisplayName("Periodic Tasks");
     }
 
     private static void ValidateServicesRegistered(IEndpointRouteBuilder endpoints)
