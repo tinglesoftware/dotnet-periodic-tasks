@@ -29,6 +29,7 @@ public static class PeriodicTasksBuilderExtensions
         var services = builder.Services;
         services.Configure(configure);
         services.AddScoped<PeriodicTasksEndpointsHandler>();
+        services.AddHttpContextAccessor();
 
         return builder;
     }
