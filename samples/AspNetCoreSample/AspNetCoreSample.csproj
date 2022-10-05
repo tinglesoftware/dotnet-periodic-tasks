@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <PackageReference Include="DistributedLock.FileSystem" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tingle.PeriodicTasks.AspNetCore\Tingle.PeriodicTasks.AspNetCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleSample", "samples\SimpleSample\SimpleSample.csproj", "{4EBCCAB0-E459-4771-8510-CE1A5839BC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tingle.PeriodicTasks.AspNetCore", "src\Tingle.PeriodicTasks.AspNetCore\Tingle.PeriodicTasks.AspNetCore.csproj", "{CBADA999-E109-4357-A2C3-CEF4197D0300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.AspNetCore", "src\Tingle.PeriodicTasks.AspNetCore\Tingle.PeriodicTasks.AspNetCore.csproj", "{CBADA999-E109-4357-A2C3-CEF4197D0300}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample", "samples\AspNetCoreSample\AspNetCoreSample.csproj", "{144BA4AB-A406-4514-8305-D61F96684E0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144BA4AB-A406-4514-8305-D61F96684E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144BA4AB-A406-4514-8305-D61F96684E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144BA4AB-A406-4514-8305-D61F96684E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144BA4AB-A406-4514-8305-D61F96684E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7} = {6330BC0A-64CB-46E9-AB48-81F62CF401BF}
 		{4EBCCAB0-E459-4771-8510-CE1A5839BC54} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
 		{CBADA999-E109-4357-A2C3-CEF4197D0300} = {C9E4C47F-7E9D-46F5-9B98-9BDF5B831C9A}
+		{144BA4AB-A406-4514-8305-D61F96684E0B} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0429DC38-945E-4301-A277-FCA3B4432BE1}
