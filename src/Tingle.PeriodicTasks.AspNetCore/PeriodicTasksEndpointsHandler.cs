@@ -26,7 +26,7 @@ internal class PeriodicTasksEndpointsHandler
         return Results.Ok(attempts);
     }
 
-    public async Task<IResult> ExecuteOnDemandAsync(PeriodicTaskExecutionRequest request)
+    public async Task<IResult> ExecuteAsync(PeriodicTaskExecutionRequest request)
     {
         var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
         var registration = GetRegistration(name);
@@ -51,7 +51,8 @@ internal class PeriodicTasksEndpointsHandler
             await t.ConfigureAwait(false);
         }
 
-        return Results.Ok(); // when attempt is offered, return it
+        PeriodicTaskExecutionAttempt? attempt = null; // when attempt is offered, use it
+        return Results.Ok(attempt);
     }
 
     private PeriodicTaskRegistration? GetRegistration(string name)

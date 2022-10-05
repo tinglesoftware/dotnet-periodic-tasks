@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Tingle.PeriodicTasks.AspNetCore.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="..\Tingle.PeriodicTasks\Tingle.PeriodicTasks.csproj" />
   </ItemGroup>

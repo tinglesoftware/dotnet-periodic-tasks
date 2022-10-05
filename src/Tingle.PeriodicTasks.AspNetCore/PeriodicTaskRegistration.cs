@@ -1,6 +1,6 @@
 ﻿namespace Tingle.PeriodicTasks.AspNetCore;
 
-internal class PeriodicTaskRegistration
+internal sealed record PeriodicTaskRegistration
 {
     public PeriodicTaskRegistration() { }
 

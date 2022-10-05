@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tingle.PeriodicTasks.AspNetCore\Tingle.PeriodicTasks.AspNetCore.csproj" />
+  </ItemGroup>
+
+</Project>

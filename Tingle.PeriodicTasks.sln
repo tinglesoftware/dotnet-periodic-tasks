@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.AspNet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample", "samples\AspNetCoreSample\AspNetCoreSample.csproj", "{144BA4AB-A406-4514-8305-D61F96684E0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tingle.PeriodicTasks.AspNetCore.Tests", "tests\Tingle.PeriodicTasks.AspNetCore.Tests\Tingle.PeriodicTasks.AspNetCore.Tests.csproj", "{838F9F49-C387-430C-9738-1B3A3176F88D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838F9F49-C387-430C-9738-1B3A3176F88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838F9F49-C387-430C-9738-1B3A3176F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838F9F49-C387-430C-9738-1B3A3176F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838F9F49-C387-430C-9738-1B3A3176F88D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{4EBCCAB0-E459-4771-8510-CE1A5839BC54} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
 		{CBADA999-E109-4357-A2C3-CEF4197D0300} = {C9E4C47F-7E9D-46F5-9B98-9BDF5B831C9A}
 		{144BA4AB-A406-4514-8305-D61F96684E0B} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
+		{838F9F49-C387-430C-9738-1B3A3176F88D} = {6330BC0A-64CB-46E9-AB48-81F62CF401BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0429DC38-945E-4301-A277-FCA3B4432BE1}

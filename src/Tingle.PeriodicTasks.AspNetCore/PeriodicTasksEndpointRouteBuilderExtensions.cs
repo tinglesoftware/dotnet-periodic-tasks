@@ -27,7 +27,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
             builder.MapGet($"{prefix}/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List()),
             builder.MapGet($"{prefix}/registrations/{{name}}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name)),
             builder.MapGet($"{prefix}/registrations/{{name}}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name)),
-            builder.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteOnDemandAsync(request)),
+            builder.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request)),
         };
 
         return new PeriodicTasksEndpointConventionBuilder(builders).WithGroupName("periodic-tasks").WithDisplayName("Periodic Tasks");
