@@ -11,26 +11,27 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
     /// <summary>
     /// Maps incoming requests to the paths for periodic tasks.
     /// </summary>
-    /// <param name="builder">The <see cref="IEndpointRouteBuilder"/> to add the routes to.</param>
+    /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the routes to.</param>
     /// <param name="prefix">The path prefix for the endpoints exposed.</param>
-    /// <returns>A <see cref="PeriodicTasksEndpointConventionBuilder"/> for endpoints associated with the service.</returns>
-    public static PeriodicTasksEndpointConventionBuilder MapPeriodicTasks(this IEndpointRouteBuilder builder, string prefix = "/periodic-tasks")
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> for endpoints associated with the service.</returns>
+    public static IEndpointConventionBuilder MapPeriodicTasks(this IEndpointRouteBuilder endpoints, string prefix = "/periodic-tasks")
     {
-        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(endpoints);
 
-        ValidateServicesRegistered(builder);
+        ValidateServicesRegistered(endpoints);
 
         // in .NET 7 use route groups to avoid the prefix?
         prefix = prefix.TrimEnd('/');
         var builders = new[]
         {
-            builder.MapGet($"{prefix}/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List()),
-            builder.MapGet($"{prefix}/registrations/{{name}}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name)),
-            builder.MapGet($"{prefix}/registrations/{{name}}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name)),
-            builder.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request)),
+            endpoints.MapGet($"{prefix}/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List()),
+            endpoints.MapGet($"{prefix}/registrations/{{name}}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name)),
+            endpoints.MapGet($"{prefix}/registrations/{{name}}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name)),
+            endpoints.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request)),
         };
 
-        return new PeriodicTasksEndpointConventionBuilder(builders).WithGroupName("periodic-tasks").WithDisplayName("Periodic Tasks");
+        IEndpointConventionBuilder builder = new PeriodicTasksEndpointConventionBuilder(builders);
+        return builder.WithGroupName("periodic-tasks").WithDisplayName("Periodic Tasks");
     }
 
     private static void ValidateServicesRegistered(IEndpointRouteBuilder endpoints)

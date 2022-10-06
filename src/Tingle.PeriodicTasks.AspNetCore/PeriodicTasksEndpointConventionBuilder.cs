@@ -3,7 +3,7 @@
 /// <summary>
 /// Builds conventions that will be used for customization of periodic tasks <see cref="EndpointBuilder"/> instances.
 /// </summary>
-public sealed class PeriodicTasksEndpointConventionBuilder : IEndpointConventionBuilder
+internal class PeriodicTasksEndpointConventionBuilder : IEndpointConventionBuilder
 {
     private readonly List<IEndpointConventionBuilder> builders;
 
