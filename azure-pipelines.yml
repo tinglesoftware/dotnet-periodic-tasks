@@ -97,7 +97,7 @@ stages:
   dependsOn: Build
   jobs:
   - deployment: Internal
-    environment: Azure Artifacts (Nuget)
+    environment: Azure Artifacts
     pool:
       vmImage: 'ubuntu-latest'
 
