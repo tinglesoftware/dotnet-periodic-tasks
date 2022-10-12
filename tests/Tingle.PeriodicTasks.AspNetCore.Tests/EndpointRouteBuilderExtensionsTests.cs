@@ -17,6 +17,7 @@ public class EndpointRouteBuilderExtensionsTests
         Name = "dummy",
         Type = typeof(DummyTask).FullName,
         AwaitExecution = true,
+        Description = "some description here",
         Enable = true,
         ExecuteOnStartup = false,
         LockName = (typeof(DummyTask).Assembly.GetName().Name + ":dummy").ToLower(),
@@ -198,6 +199,7 @@ public class EndpointRouteBuilderExtensionsTests
         Assert.Equal(0, response.Content.Headers.ContentLength);
     }
 
+    [PeriodicTaskDescription("some description here")]
     class DummyTask : IPeriodicTask
     {
         private readonly ILogger logger;

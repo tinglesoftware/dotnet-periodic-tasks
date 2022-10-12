@@ -14,6 +14,13 @@ public class PeriodicTaskOptions
     public bool Enable { get; set; } = true;
 
     /// <summary>
+    /// Optional description of the task.
+    /// When not configured, a value is pulled from either <see cref="PeriodicTaskDescriptionAttribute"/>
+    /// or <see cref="System.ComponentModel.DescriptionAttribute"/> as annotated/decorated on the task.
+    /// </summary>
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the task should be executed on startup.
     /// This is useful for tasks that need to run early then repeat a while later
     /// instead of having a high rate <see cref="Schedule"/>.

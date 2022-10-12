@@ -8,6 +8,7 @@ internal sealed record PeriodicTaskRegistration
     {
         Name = name;
         Type = type.FullName;
+        Description = options.Description;
         Enable = options.Enable;
         ExecuteOnStartup = options.ExecuteOnStartup;
         Schedule = options.Schedule.ToString();
@@ -21,6 +22,7 @@ internal sealed record PeriodicTaskRegistration
 
     public string? Name { get; set; }
     public string? Type { get; set; }
+    public string? Description { get; set; }
     public bool Enable { get; set; }
     public bool ExecuteOnStartup { get; set; }
     public string? Schedule { get; set; }
