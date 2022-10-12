@@ -33,7 +33,8 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
 
         var tt = options.TaskType ?? throw new InvalidOperationException("The task type should not be null! This is an error in the library.");
         options.Description ??= tt.GetCustomAttribute<PeriodicTaskDescriptionAttribute>()?.Description
-                             ?? tt.GetCustomAttribute<DescriptionAttribute>()?.Description;
+                             ?? tt.GetCustomAttribute<DescriptionAttribute>()?.Description
+                             ?? string.Empty; // makes sure it is visible during serialization
     }
 
     /// <inheritdoc/>
