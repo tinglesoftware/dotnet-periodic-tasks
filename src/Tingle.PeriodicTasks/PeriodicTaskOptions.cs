@@ -15,6 +15,8 @@ public class PeriodicTaskOptions
 
     /// <summary>
     /// Optional description of the task.
+    /// This value is useful for display purposes.
+    /// <br/>
     /// When not configured, a value is pulled from either <see cref="PeriodicTaskDescriptionAttribute"/>
     /// or <see cref="System.ComponentModel.DescriptionAttribute"/> as annotated/decorated on the task.
     /// </summary>
