@@ -63,7 +63,11 @@ public class PeriodicTasksBuilder
             opt.AddRegistration(name, typeof(TTask));
         });
 
-        Services.Configure(name, configure);
+        Services.Configure<PeriodicTaskOptions>(name, (options) =>
+        {
+            options.TaskType = typeof(TTask);
+            configure(options);
+        });
         return AddTaskRunner<TTask, PeriodicTaskRunner<TTask>>();
     }
 
