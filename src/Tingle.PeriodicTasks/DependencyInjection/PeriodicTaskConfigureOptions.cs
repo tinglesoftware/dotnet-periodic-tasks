@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using System.ComponentModel;
+using System.Reflection;
 using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,10 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     public void PostConfigure(string name, PeriodicTaskOptions options)
     {
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
+
+        var tt = options.TaskType ?? throw new InvalidOperationException("The task type should not be null! This is an error in the library.");
+        options.Description ??= tt.GetCustomAttribute<PeriodicTaskDescriptionAttribute>()?.Description
+                             ?? tt.GetCustomAttribute<DescriptionAttribute>()?.Description;
     }
 
     /// <inheritdoc/>

@@ -5,11 +5,22 @@ namespace Tingle.PeriodicTasks;
 /// <summary>Options for an <see cref="IPeriodicTask"/>.</summary>
 public class PeriodicTaskOptions
 {
+    internal Type? TaskType { get; set; }
+
     /// <summary>
     /// Gets or sets a value indicating whether the task is enabled.
     /// Defaults to <see langword="true"/>.
     /// </summary>
     public bool Enable { get; set; } = true;
+
+    /// <summary>
+    /// Optional description of the task.
+    /// This value is useful for display purposes.
+    /// <br/>
+    /// When not configured, a value is pulled from either <see cref="PeriodicTaskDescriptionAttribute"/>
+    /// or <see cref="System.ComponentModel.DescriptionAttribute"/> as annotated/decorated on the task.
+    /// </summary>
+    public string? Description { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the task should be executed on startup.
