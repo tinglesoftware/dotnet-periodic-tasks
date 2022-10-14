@@ -8,6 +8,7 @@ public class PeriodicTasksBuilderTests
     [InlineData("RecordCleanupJob", "RecordCleanup")]
     [InlineData("RecordCleanupTask", "RecordCleanup")]
     [InlineData("RecordCleanupJobTask", "RecordCleanup")]
+    [InlineData("RecordCleanupPeriodicTask", "RecordCleanup")]
     [InlineData("RecordCleanup", "RecordCleanup")] // unchanged
     public void TrimCommonSuffixes_Works(string typeName, string expected)
     {

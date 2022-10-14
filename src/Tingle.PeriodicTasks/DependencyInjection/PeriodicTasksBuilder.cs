@@ -73,26 +73,11 @@ public class PeriodicTasksBuilder
 
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
-    /// <param name="configure">Used to configure the periodic task options.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
-    public PeriodicTasksBuilder AddTask<TTask>(Action<PeriodicTaskOptions> configure) where TTask : class, IPeriodicTask
-        => AddTask<TTask>(MakeName<TTask>(), configure);
-
-    /// <summary>Add a period task.</summary>
-    /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="name">The name of the task.</param>
     /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
     public PeriodicTasksBuilder AddTask<TTask>(string name) where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(name, options => { /* nothing to do */ });
-    }
-
-    /// <summary>Add a period task.</summary>
-    /// <typeparam name="TTask">The period task to execute.</typeparam>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
-    public PeriodicTasksBuilder AddTask<TTask>() where TTask : class, IPeriodicTask
-    {
-        return AddTask<TTask>(options => { /* nothing to do */ });
     }
 
     /// <summary>Add a period task.</summary>
@@ -103,6 +88,21 @@ public class PeriodicTasksBuilder
     public PeriodicTasksBuilder AddTask<TTask>(string name, CronSchedule schedule) where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(name, options => options.Schedule = schedule);
+    }
+
+    /// <summary>Add a period task.</summary>
+    /// <typeparam name="TTask">The period task to execute.</typeparam>
+    /// <param name="configure">Used to configure the periodic task options.</param>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    public PeriodicTasksBuilder AddTask<TTask>(Action<PeriodicTaskOptions> configure) where TTask : class, IPeriodicTask
+        => AddTask<TTask>(MakeName<TTask>(), configure);
+
+    /// <summary>Add a period task.</summary>
+    /// <typeparam name="TTask">The period task to execute.</typeparam>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    public PeriodicTasksBuilder AddTask<TTask>() where TTask : class, IPeriodicTask
+    {
+        return AddTask<TTask>(MakeName<TTask>(), options => { /* nothing to do */ });
     }
 
     /// <summary>Add a period task.</summary>
@@ -142,25 +142,6 @@ public class PeriodicTasksBuilder
         Services.AddSingleton(runner);
         return this;
     }
-
-    /// <summary>Configure options for a Periodic Task.</summary>
-    /// <param name="configure">Used to configure the periodic task options.</param>
-    /// <param name="name">The name of the task.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
-    public PeriodicTasksBuilder Configure(string name, Action<PeriodicTaskOptions> configure)
-    {
-        if (configure is null) throw new ArgumentNullException(nameof(configure));
-
-        Services.Configure(name, configure);
-        return this;
-    }
-
-    /// <summary>Configure options for a Periodic Task.</summary>
-    /// <typeparam name="TTask">The period task to execute.</typeparam>
-    /// <param name="configure">Used to configure the periodic task options.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
-    public PeriodicTasksBuilder Configure<TTask>(Action<PeriodicTaskOptions> configure) where TTask : class, IPeriodicTask
-        => Configure(MakeName<TTask>(), configure);
 
     internal string MakeName<TTask>(bool trim = true) where TTask : class, IPeriodicTask
     {
