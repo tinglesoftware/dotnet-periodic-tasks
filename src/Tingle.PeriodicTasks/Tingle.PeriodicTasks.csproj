@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <Description>Basic implementation of periodic tasks in .NET.</Description>
-    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

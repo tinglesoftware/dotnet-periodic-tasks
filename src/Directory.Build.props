@@ -9,7 +9,7 @@
     <!--<IsPackable>true</IsPackable>-->
     <Company>Tingle Software</Company>
     <Authors>Tingle Software</Authors>
-    <PackageTags>$(PackageTags);dotnet;netstandard</PackageTags>
+    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
