@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public class PeriodicTasksBuilder
 {
-    private static readonly Regex trimPattern = new("(Job|Task|JobTask)$", RegexOptions.Compiled);
+    private static readonly Regex trimPattern = new("(Job|Task|JobTask|PeriodicTask)$", RegexOptions.Compiled);
 
     /// <summary>
     /// Creates an instance of <see cref="PeriodicTasksBuilder"/>.
