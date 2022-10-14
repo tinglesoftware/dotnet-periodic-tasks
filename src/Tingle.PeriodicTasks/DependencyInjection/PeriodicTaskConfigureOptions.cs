@@ -4,7 +4,7 @@ using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IPostConfigureOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
+internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
 {
     private readonly PeriodicTasksHostOptions tasksHostOptions;
 
@@ -23,11 +23,6 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     public void Configure(string name, PeriodicTaskOptions options)
     {
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
-    }
-
-    /// <inheritdoc/>
-    public void PostConfigure(string name, PeriodicTaskOptions options)
-    {
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
 
         // try configure the description
