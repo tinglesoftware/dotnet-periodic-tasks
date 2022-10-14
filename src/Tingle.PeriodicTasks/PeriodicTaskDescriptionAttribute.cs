@@ -12,5 +12,6 @@ public sealed class PeriodicTaskDescriptionAttribute : Attribute
         this.Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
-    internal string Description { get; }
+    ///
+    public string Description { get; }
 }
