@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.Internal;
 
@@ -53,6 +55,8 @@ public class PeriodicTasksBuilder
     {
         if (configure is null) throw new ArgumentNullException(nameof(configure));
 
+        var tt = typeof(TTask);
+
         Configure(opt =>
         {
             if (opt.Registrations.TryGetValue(name, out var r))
@@ -60,14 +64,19 @@ public class PeriodicTasksBuilder
                 throw new InvalidOperationException($"A task with the name '{name}' has already been registered. Names are case insensitive.");
             }
 
-            opt.AddRegistration(name, typeof(TTask));
+            opt.AddRegistration(name, tt);
         });
 
-        Services.Configure<PeriodicTaskOptions>(name, (options) =>
+        Services.Configure(name, configure);
+
+        // for some unknown reason, it seems like the doing this using IConfigureOptions does not work
+        Services.PostConfigure<PeriodicTaskOptions>(name, options =>
         {
-            options.TaskType = typeof(TTask);
-            configure(options);
+            options.Description ??= tt.GetCustomAttribute<PeriodicTaskDescriptionAttribute>()?.Description
+                                 ?? tt.GetCustomAttribute<DescriptionAttribute>()?.Description
+                                 ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
         });
+
         return AddTaskRunner<TTask, PeriodicTaskRunner<TTask>>();
     }
 
@@ -111,7 +120,7 @@ public class PeriodicTasksBuilder
     /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
     public PeriodicTasksBuilder AddTask<TTask>(CronSchedule schedule) where TTask : class, IPeriodicTask
     {
-        return AddTask<TTask>(options => options.Schedule = schedule);
+        return AddTask<TTask>(MakeName<TTask>(), options => options.Schedule = schedule);
     }
 
     /// <summary>Add a runner for a task.</summary>
