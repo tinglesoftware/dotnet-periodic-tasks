@@ -70,10 +70,11 @@ public class PeriodicTasksBuilder
         Services.Configure(name, configure);
 
         // for some unknown reason, it seems like the doing this using IConfigureOptions does not work
+        var tti = tt.GetTypeInfo();
         Services.PostConfigure<PeriodicTaskOptions>(name, options =>
         {
-            options.Description ??= tt.GetCustomAttribute<PeriodicTaskDescriptionAttribute>()?.Description
-                                 ?? tt.GetCustomAttribute<DescriptionAttribute>()?.Description
+            options.Description ??= tti.GetCustomAttribute<PeriodicTaskDescriptionAttribute>()?.Description
+                                 ?? tti.GetCustomAttribute<DescriptionAttribute>()?.Description
                                  ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
         });
 

@@ -5,8 +5,6 @@ namespace Tingle.PeriodicTasks;
 /// <summary>Options for an <see cref="IPeriodicTask"/>.</summary>
 public class PeriodicTaskOptions
 {
-    internal Type? TaskType { get; set; }
-
     /// <summary>
     /// Gets or sets a value indicating whether the task is enabled.
     /// Defaults to <see langword="true"/>.
