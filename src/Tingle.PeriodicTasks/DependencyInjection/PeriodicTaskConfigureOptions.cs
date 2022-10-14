@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.ComponentModel;
 using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,13 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     public void PostConfigure(string name, PeriodicTaskOptions options)
     {
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
+
+        // try configure the description
+        var type = tasksHostOptions.Registrations[name];
+        var attrs = type.GetCustomAttributes(false);
+        options.Description ??= attrs.OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
+                             ?? attrs.OfType<DescriptionAttribute>().SingleOrDefault()?.Description
+                             ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
     }
 
     /// <inheritdoc/>

@@ -68,15 +68,6 @@ public class PeriodicTasksBuilder
         });
 
         Services.Configure(name, configure);
-
-        // for some unknown reason, it seems like the doing this using IConfigureOptions does not work
-        Services.PostConfigure<PeriodicTaskOptions>(name, options =>
-        {
-            options.Description ??= tt.GetCustomAttributes(false).OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
-                                 ?? tt.GetCustomAttributes(false).OfType<DescriptionAttribute>().SingleOrDefault()?.Description
-                                 ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
-        });
-
         return AddTaskRunner<TTask, PeriodicTaskRunner<TTask>>();
     }
 
