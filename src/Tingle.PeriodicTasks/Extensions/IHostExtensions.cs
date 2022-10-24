@@ -64,6 +64,7 @@ public static class IHostExtensions
         // find the task registration
         var provider = host.Services;
         var options = provider.GetRequiredService<IOptions<PeriodicTasksHostOptions>>().Value;
+        name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
         if (!options.Registrations.TryGetValue(name, out var type))
         {
             throw new InvalidOperationException($"A periodic task with the name '{name}' does not exist."
