@@ -12,8 +12,7 @@ public class PeriodicTasksBuilderTests
     [InlineData("RecordCleanup", "RecordCleanup")] // unchanged
     public void TrimCommonSuffixes_Works(string typeName, string expected)
     {
-        var options = new PeriodicTasksBuilder(new ServiceCollection());
-        var actual = options.TrimCommonSuffixes(typeName, true);
+        var actual = PeriodicTasksBuilder.TrimCommonSuffixes(typeName, true);
         Assert.Equal(expected, actual);
     }
 }

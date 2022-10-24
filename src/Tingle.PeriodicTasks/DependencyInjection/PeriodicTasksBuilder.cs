@@ -149,5 +149,5 @@ public class PeriodicTasksBuilder
             : TrimCommonSuffixes(type.Name, trim).ToLowerInvariant();
     }
 
-    internal string TrimCommonSuffixes(string untrimmed, bool trim) => trim ? trimPattern.Replace(untrimmed, "") : untrimmed;
+    internal static string TrimCommonSuffixes(string untrimmed, bool trim) => trim ? trimPattern.Replace(untrimmed, "") : untrimmed;
 }
