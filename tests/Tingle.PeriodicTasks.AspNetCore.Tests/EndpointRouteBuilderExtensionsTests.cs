@@ -28,10 +28,23 @@ public class EndpointRouteBuilderExtensionsTests
         ExecutionIdFormat = PeriodicTaskIdFormat.GuidNoDashes,
     };
 
+    private readonly ITestOutputHelper outputHelper;
+
+    public EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
+    {
+        this.outputHelper = outputHelper ?? throw new ArgumentNullException(nameof(outputHelper));
+    }
+
     [Fact] // Matches based on '.Map'
     public async Task IgnoresRequestThatDoesNotMatchPath()
     {
         var builder = new WebHostBuilder()
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
+            .ConfigureServices(services =>
+            {
+                services.AddRouting();
+                services.AddPeriodicTasks(builder => builder.AddAspNetCore());
+            })
             .Configure(app =>
             {
                 app.UseRouting();
@@ -39,11 +52,6 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     endpoints.MapPeriodicTasks();
                 });
-            })
-            .ConfigureServices(services =>
-            {
-                services.AddRouting();
-                services.AddPeriodicTasks(builder => builder.AddAspNetCore());
             });
         using var server = new TestServer(builder);
         var client = server.CreateClient();
@@ -56,6 +64,12 @@ public class EndpointRouteBuilderExtensionsTests
     public async Task MatchIsCaseInsensitive()
     {
         var builder = new WebHostBuilder()
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
+            .ConfigureServices(services =>
+            {
+                services.AddRouting();
+                services.AddPeriodicTasks(builder => builder.AddAspNetCore());
+            })
             .Configure(app =>
             {
                 app.UseRouting();
@@ -63,11 +77,6 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     endpoints.MapPeriodicTasks();
                 });
-            })
-            .ConfigureServices(services =>
-            {
-                services.AddRouting();
-                services.AddPeriodicTasks(builder => builder.AddAspNetCore());
             });
         using var server = new TestServer(builder);
         var client = server.CreateClient();
@@ -83,14 +92,7 @@ public class EndpointRouteBuilderExtensionsTests
     public async Task ListingWorks()
     {
         var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapPeriodicTasks();
-                });
-            })
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
@@ -98,6 +100,14 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     builder.AddTask<DummyTask>();
                     builder.AddAspNetCore();
+                });
+            })
+            .Configure(app =>
+            {
+                app.UseRouting();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -113,14 +123,7 @@ public class EndpointRouteBuilderExtensionsTests
     public async Task GetWorks()
     {
         var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapPeriodicTasks();
-                });
-            })
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
@@ -128,6 +131,14 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     builder.AddTask<DummyTask>();
                     builder.AddAspNetCore();
+                });
+            })
+            .Configure(app =>
+            {
+                app.UseRouting();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -142,14 +153,7 @@ public class EndpointRouteBuilderExtensionsTests
     public async Task GetHistoryWorks()
     {
         var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapPeriodicTasks();
-                });
-            })
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
@@ -157,6 +161,14 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     builder.AddTask<DummyTask>();
                     builder.AddAspNetCore();
+                });
+            })
+            .Configure(app =>
+            {
+                app.UseRouting();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -171,14 +183,7 @@ public class EndpointRouteBuilderExtensionsTests
     public async Task ExecuteWorks()
     {
         var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapPeriodicTasks();
-                });
-            })
+            .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
@@ -187,6 +192,14 @@ public class EndpointRouteBuilderExtensionsTests
                 {
                     builder.AddTask<DummyTask>();
                     builder.AddAspNetCore();
+                });
+            })
+            .Configure(app =>
+            {
+                app.UseRouting();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
