@@ -141,7 +141,7 @@ public class PeriodicTasksBuilder
         return this;
     }
 
-    internal string MakeName<TTask>(bool trim = true) where TTask : class, IPeriodicTask
+    internal static string MakeName<TTask>(bool trim = true) where TTask : class, IPeriodicTask
     {
         var type = typeof(TTask);
         return type.IsGenericType
