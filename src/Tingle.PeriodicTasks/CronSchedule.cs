@@ -3,7 +3,7 @@
 namespace Tingle.PeriodicTasks;
 
 /// <summary>Represents a CRON schedule.</summary>
-public struct CronSchedule : IEquatable<CronSchedule>, IConvertible
+public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
 {
     ///
     public static readonly CronSchedule Yearly = new("0 0 1 1 *");
