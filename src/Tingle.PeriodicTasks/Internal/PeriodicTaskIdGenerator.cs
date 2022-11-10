@@ -5,10 +5,7 @@ internal class PeriodicTaskIdGenerator : IPeriodicTaskIdGenerator
     /// <inheritdoc/>
     public string Generate(string name, PeriodicTaskIdFormat format)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
-        }
+        ArgumentException.ThrowIfNullOrEmpty(name);
 
         var id = Guid.NewGuid();
         var bytes = id.ToByteArray();

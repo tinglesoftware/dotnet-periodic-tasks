@@ -20,8 +20,10 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     }
 
     /// <inheritdoc/>
-    public void Configure(string name, PeriodicTaskOptions options)
+    public void Configure(string? name, PeriodicTaskOptions options)
     {
+        ArgumentException.ThrowIfNullOrEmpty(name);
+
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
 
@@ -34,12 +36,9 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     }
 
     /// <inheritdoc/>
-    public ValidateOptionsResult Validate(string name, PeriodicTaskOptions options)
+    public ValidateOptionsResult Validate(string? name, PeriodicTaskOptions options)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
-        }
+        ArgumentException.ThrowIfNullOrEmpty(name);
 
         // ensure we have a lock name
         if (string.IsNullOrWhiteSpace(options.LockName))

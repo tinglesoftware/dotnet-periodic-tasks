@@ -18,7 +18,7 @@ public static class IHostExtensions
     /// <returns></returns>
     public static Task RunOrExecutePeriodicTaskAsync(this IHost host, CancellationToken cancellationToken = default)
     {
-        if (host is null) throw new ArgumentNullException(nameof(host));
+        ArgumentNullException.ThrowIfNull(host);
 
         return host.TryGetPeriodicTaskName(out var taskName)
             ? host.ExecutePeriodicTaskAsync(taskName, cancellationToken)
@@ -45,7 +45,7 @@ public static class IHostExtensions
     /// </returns>
     public static bool TryGetPeriodicTaskName(this IHost host, [NotNullWhen(true)] out string? name)
     {
-        if (host is null) throw new ArgumentNullException(nameof(host));
+        ArgumentNullException.ThrowIfNull(host);
 
         var configuration = host.Services.GetRequiredService<IConfiguration>();
         return configuration.TryGetPeriodicTaskName(out name);
@@ -58,8 +58,8 @@ public static class IHostExtensions
     /// <returns></returns>
     public static Task ExecutePeriodicTaskAsync(this IHost host, string name, CancellationToken cancellationToken = default)
     {
-        if (host is null) throw new ArgumentNullException(nameof(host));
-        if (name is null) throw new ArgumentNullException(nameof(name));
+        ArgumentNullException.ThrowIfNull(host);
+        ArgumentNullException.ThrowIfNull(name);
 
         // find the task registration
         var provider = host.Services;

@@ -12,8 +12,7 @@ public static class IServiceCollectionExtensions
     /// <returns>An <see cref="PeriodicTasksBuilder"/> to continue setting up the Periodic Tasks.</returns>
     public static PeriodicTasksBuilder AddPeriodicTasks(this IServiceCollection services)
     {
-        if (services == null) throw new ArgumentNullException(nameof(services));
-
+        ArgumentNullException.ThrowIfNull(services);
         return new PeriodicTasksBuilder(services);
     }
 
@@ -25,7 +24,7 @@ public static class IServiceCollectionExtensions
     /// <returns>An <see cref="PeriodicTasksBuilder"/> to continue setting up the Periodic Tasks.</returns>
     public static IServiceCollection AddPeriodicTasks(this IServiceCollection services, Action<PeriodicTasksBuilder>? setupAction = null)
     {
-        if (services == null) throw new ArgumentNullException(nameof(services));
+        ArgumentNullException.ThrowIfNull(services);
 
         var builder = services.AddPeriodicTasks();
 

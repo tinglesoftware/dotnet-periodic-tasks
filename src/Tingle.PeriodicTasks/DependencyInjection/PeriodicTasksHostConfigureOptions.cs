@@ -19,7 +19,7 @@ internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTas
     }
 
     /// <inheritdoc/>
-    public ValidateOptionsResult Validate(string name, PeriodicTasksHostOptions options)
+    public ValidateOptionsResult Validate(string? name, PeriodicTasksHostOptions options)
     {
         if (string.IsNullOrWhiteSpace(options.LockNamePrefix))
         {

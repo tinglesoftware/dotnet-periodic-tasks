@@ -2,8 +2,8 @@
 
 namespace Tingle.PeriodicTasks;
 
-/// <summary>Represents a cron schedule.</summary>
-public struct CronSchedule : IEquatable<CronSchedule>, IConvertible
+/// <summary>Represents a CRON schedule.</summary>
+public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
 {
     ///
     public static readonly CronSchedule Yearly = new("0 0 1 1 *");
@@ -19,7 +19,7 @@ public struct CronSchedule : IEquatable<CronSchedule>, IConvertible
     private readonly CronExpression expression;
 
     /// <summary>Creates an instance of <see cref="CronSchedule"/>.</summary>
-    /// <param name="value">The cron schedule e.g. <c>0 3 * * *</c></param>
+    /// <param name="value">The CRON schedule e.g. <c>0 3 * * *</c></param>
     public CronSchedule(string value) : this(ParseExpression(value)) { }
 
     internal CronSchedule(CronExpression expression)
