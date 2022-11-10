@@ -20,18 +20,20 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
         ValidateServicesRegistered(endpoints);
 
-        // in .NET 7 use route groups to avoid the prefix?
-        prefix = prefix.TrimEnd('/');
-        var builders = new[]
-        {
-            endpoints.MapGet($"{prefix}/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List()),
-            endpoints.MapGet($"{prefix}/registrations/{{name}}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name)),
-            endpoints.MapGet($"{prefix}/registrations/{{name}}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name)),
-            endpoints.MapPost($"{prefix}/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request)),
-        };
+        var group = endpoints.MapGroup(prefix);
+        group.MapGet("/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List())
+             .WithDisplayName("periodic-tasks-list");
 
-        IEndpointConventionBuilder builder = new PeriodicTasksEndpointConventionBuilder(builders);
-        return builder.WithGroupName("periodic-tasks").WithDisplayName("Periodic Tasks");
+        group.MapGet("/registrations/{name}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name))
+             .WithDisplayName("periodic-tasks-get");
+
+        group.MapGet("/registrations/{name}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name))
+             .WithDisplayName("periodic-tasks-history");
+
+        group.MapPost("/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request))
+             .WithDisplayName("periodic-tasks-execute");
+
+        return group.WithGroupName("periodic-tasks");
     }
 
     private static void ValidateServicesRegistered(IEndpointRouteBuilder endpoints)
