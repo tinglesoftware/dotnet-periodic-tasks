@@ -21,7 +21,7 @@ public static class IConfigurationExtensions
     /// </returns>
     public static bool TryGetPeriodicTaskName(this IConfiguration configuration, [NotNullWhen(true)] out string? name)
     {
-        if (configuration is null) throw new ArgumentNullException(nameof(configuration));
+        ArgumentNullException.ThrowIfNull(configuration);
         return (name = configuration["PERIODIC_TASK_NAME"] is string s ? s : null) is not null;
     }
 }

@@ -38,7 +38,7 @@ public class PeriodicTasksBuilder
     /// <returns></returns>
     public PeriodicTasksBuilder Configure(Action<PeriodicTasksHostOptions> configure)
     {
-        if (configure is null) throw new ArgumentNullException(nameof(configure));
+        ArgumentNullException.ThrowIfNull(configure);
 
         Services.Configure(configure);
         return this;
@@ -51,7 +51,7 @@ public class PeriodicTasksBuilder
     /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
     public PeriodicTasksBuilder AddTask<TTask>(string name, Action<PeriodicTaskOptions> configure) where TTask : class, IPeriodicTask
     {
-        if (configure is null) throw new ArgumentNullException(nameof(configure));
+        ArgumentNullException.ThrowIfNull(configure);
 
         var tt = typeof(TTask);
 

@@ -13,7 +13,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
     /// </summary>
     /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the routes to.</param>
     /// <param name="prefix">The path prefix for the endpoints exposed.</param>
-    /// <returns>A <see cref="IEndpointConventionBuilder"/> for endpoints associated with the service.</returns>
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> for endpoints associated with periodic tasks.</returns>
     public static IEndpointConventionBuilder MapPeriodicTasks(this IEndpointRouteBuilder endpoints, string prefix = "/periodic-tasks")
     {
         ArgumentNullException.ThrowIfNull(endpoints);
