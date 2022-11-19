@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Support for triggering periodic tasks using events from Tingle.EventBus libraries</Description>
+    <PackageTags>$(PackageTags);eventbus</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tingle.PeriodicTasks.EventBus.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tingle.EventBus" Version="0.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tingle.PeriodicTasks\Tingle.PeriodicTasks.csproj" />
+  </ItemGroup>
+
+</Project>
