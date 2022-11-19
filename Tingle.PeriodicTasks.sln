@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.AspNetCore", "src\Tingle.PeriodicTasks.AspNetCore\Tingle.PeriodicTasks.AspNetCore.csproj", "{CBADA999-E109-4357-A2C3-CEF4197D0300}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.EventBus", "src\Tingle.PeriodicTasks.EventBus\Tingle.PeriodicTasks.EventBus.csproj", "{986790F0-57F3-4243-9689-7BA4B5B6F6FE}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6330BC0A-64CB-46E9-AB48-81F62CF401BF}"
 	ProjectSection(SolutionItems) = preProject
 		tests\Directory.Build.props = tests\Directory.Build.props
@@ -20,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.Tests", "tests\Tingle.PeriodicTasks.Tests\Tingle.PeriodicTasks.Tests.csproj", "{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.AspNetCore.Tests", "tests\Tingle.PeriodicTasks.AspNetCore.Tests\Tingle.PeriodicTasks.AspNetCore.Tests.csproj", "{838F9F49-C387-430C-9738-1B3A3176F88D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tingle.PeriodicTasks.EventBus.Tests", "tests\Tingle.PeriodicTasks.EventBus.Tests\Tingle.PeriodicTasks.EventBus.Tests.csproj", "{796BD132-7F81-4DED-939A-455FBE4C26C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{0ADC51A4-CD37-4D45-8F91-AA493AE00197}"
 	ProjectSection(SolutionItems) = preProject
@@ -44,6 +48,10 @@ Global
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBADA999-E109-4357-A2C3-CEF4197D0300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{986790F0-57F3-4243-9689-7BA4B5B6F6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{986790F0-57F3-4243-9689-7BA4B5B6F6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{986790F0-57F3-4243-9689-7BA4B5B6F6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{986790F0-57F3-4243-9689-7BA4B5B6F6FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,6 +60,10 @@ Global
 		{838F9F49-C387-430C-9738-1B3A3176F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{838F9F49-C387-430C-9738-1B3A3176F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{838F9F49-C387-430C-9738-1B3A3176F88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796BD132-7F81-4DED-939A-455FBE4C26C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796BD132-7F81-4DED-939A-455FBE4C26C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796BD132-7F81-4DED-939A-455FBE4C26C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796BD132-7F81-4DED-939A-455FBE4C26C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{144BA4AB-A406-4514-8305-D61F96684E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,8 +79,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1ABC0820-6CAD-4BEB-836A-512861C25ED6} = {C9E4C47F-7E9D-46F5-9B98-9BDF5B831C9A}
 		{CBADA999-E109-4357-A2C3-CEF4197D0300} = {C9E4C47F-7E9D-46F5-9B98-9BDF5B831C9A}
+		{986790F0-57F3-4243-9689-7BA4B5B6F6FE} = {C9E4C47F-7E9D-46F5-9B98-9BDF5B831C9A}
 		{197AB8C9-E0D0-4646-892B-6B0E45DCC3C7} = {6330BC0A-64CB-46E9-AB48-81F62CF401BF}
 		{838F9F49-C387-430C-9738-1B3A3176F88D} = {6330BC0A-64CB-46E9-AB48-81F62CF401BF}
+		{796BD132-7F81-4DED-939A-455FBE4C26C6} = {6330BC0A-64CB-46E9-AB48-81F62CF401BF}
 		{144BA4AB-A406-4514-8305-D61F96684E0B} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
 		{4EBCCAB0-E459-4771-8510-CE1A5839BC54} = {0ADC51A4-CD37-4D45-8F91-AA493AE00197}
 	EndGlobalSection
