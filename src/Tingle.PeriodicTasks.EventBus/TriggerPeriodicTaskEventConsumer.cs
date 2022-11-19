@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tingle.EventBus;
 
@@ -8,10 +9,12 @@ internal class TriggerPeriodicTaskEventConsumer : IEventConsumer<TriggerPeriodic
 {
     private readonly IServiceScopeFactory scopeFactory;
     private readonly PeriodicTasksHostOptions options;
+    private readonly ILogger logger;
 
-    public TriggerPeriodicTaskEventConsumer(IServiceScopeFactory scopeFactory, IOptions<PeriodicTasksHostOptions> optionsAccessor)
+    public TriggerPeriodicTaskEventConsumer(IServiceScopeFactory scopeFactory, IOptions<PeriodicTasksHostOptions> optionsAccessor, ILogger<TriggerPeriodicTaskEventConsumer> logger)
     {
         this.scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
     }
 
@@ -22,9 +25,10 @@ internal class TriggerPeriodicTaskEventConsumer : IEventConsumer<TriggerPeriodic
         var request = context.Event;
 
         var name = request.Name ?? throw new InvalidOperationException("The request in the event must have a name");
-        if (!options.Registrations.TryGetValue(request.Name, out var type))
+        if (!options.Registrations.TryGetValue(name, out var type))
         {
-            throw new InvalidOperationException($"No periodic task named '{name}' exists.");
+            logger.PeriodicTaskNotFound(name);
+            return;
         }
 
         // make the runner type
