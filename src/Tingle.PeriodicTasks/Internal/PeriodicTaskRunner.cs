@@ -14,6 +14,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
     private readonly IPeriodicTaskIdGenerator idGenerator;
     private readonly IOptionsMonitor<PeriodicTaskOptions> optionsMonitor;
     private readonly IDistributedLockProvider lockProvider;
+    private readonly IList<IPeriodicTaskEventSubscriber> subscribers;
     private readonly ILogger logger;
 
     public PeriodicTaskRunner(IServiceProvider serviceProvider,
@@ -21,13 +22,15 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
                               IPeriodicTaskIdGenerator idGenerator,
                               IOptionsMonitor<PeriodicTaskOptions> optionsMonitor,
                               IDistributedLockProvider lockProvider,
+                              IEnumerable<IPeriodicTaskEventSubscriber> subscribers,
                               ILogger<PeriodicTaskRunner<TTask>> logger)
     {
         this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         this.idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
         this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
-        this.lockProvider = lockProvider;
+        this.lockProvider = lockProvider ?? throw new ArgumentNullException(nameof(lockProvider));
+        this.subscribers = subscribers?.ToList() ?? throw new ArgumentNullException(nameof(subscribers));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -161,8 +164,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         var end = DateTimeOffset.UtcNow;
 
         // notify subscribers
-        var subscribers = provider.GetRequiredService<IEnumerable<IPeriodicTaskEventSubscriber>>();
-        if (subscribers.Any())
+        if (subscribers.Count > 0)
         {
             // prepare notification
             var attempt = new PeriodicTaskExecutionAttempt
