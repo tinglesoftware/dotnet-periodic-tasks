@@ -7,10 +7,14 @@ namespace Tingle.PeriodicTasks.AspNetCore;
 internal class PeriodicTasksEndpointsHandler
 {
     private readonly IHttpContextAccessor contextAccessor;
+    private readonly PeriodicTasksHostOptions hostOptions;
+    private readonly IOptionsMonitor<PeriodicTaskOptions> optionsMonitor;
 
-    public PeriodicTasksEndpointsHandler(IHttpContextAccessor contextAccessor)
+    public PeriodicTasksEndpointsHandler(IHttpContextAccessor contextAccessor, IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
     {
         this.contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
+        this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
+        hostOptions = hostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(hostOptionsAccessor));
     }
 
     public IResult List() => Results.Ok(GetRegistrations());
@@ -35,8 +39,7 @@ internal class PeriodicTasksEndpointsHandler
         // find the task type
         var context = GetHttpContext();
         var provider = context.RequestServices;
-        var options = provider.GetRequiredService<IOptions<PeriodicTasksHostOptions>>().Value;
-        var type = options.Registrations[name];
+        var type = hostOptions.Registrations[name];
 
         // make the runner type
         var genericRunnerType = typeof(IPeriodicTaskRunner<>);
@@ -61,9 +64,7 @@ internal class PeriodicTasksEndpointsHandler
     private List<PeriodicTaskRegistration> GetRegistrations()
     {
         var provider = GetRequestServices();
-        var optionsAccessor = provider.GetRequiredService<IOptions<PeriodicTasksHostOptions>>();
-        var optionsMonitor = provider.GetRequiredService<IOptionsMonitor<PeriodicTaskOptions>>();
-        var registrations = optionsAccessor.Value.Registrations;
+        var registrations = hostOptions.Registrations;
         var results = new List<PeriodicTaskRegistration>();
         foreach (var (name, type) in registrations)
         {
