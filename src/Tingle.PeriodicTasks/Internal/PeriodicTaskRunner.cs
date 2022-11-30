@@ -113,9 +113,6 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
 
     internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken)
     {
-        using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        var provider = scope.ServiceProvider;
-
         var start = DateTimeOffset.UtcNow;
         var lockName = options.LockName!;
         var lockTimeout = options.LockTimeout;
@@ -138,6 +135,9 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         Exception? caught = null;
         try
         {
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var provider = scope.ServiceProvider;
+
             var task = ActivatorUtilities.GetServiceOrCreateInstance<TTask>(provider);
 
             // Invoke handler method, with retry if specified
