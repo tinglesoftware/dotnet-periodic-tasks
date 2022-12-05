@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Tingle.PeriodicTasks.AspNetCore" />
     <InternalsVisibleTo Include="Tingle.PeriodicTasks.Tests" />
   </ItemGroup>
 

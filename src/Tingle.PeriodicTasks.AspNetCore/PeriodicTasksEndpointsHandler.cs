@@ -19,10 +19,11 @@ internal class PeriodicTasksEndpointsHandler
 
     public IResult List() => Results.Ok(GetRegistrations());
 
-    public IResult Get(string name) => Results.Ok(GetRegistration(name));
+    public IResult Get(string name) => Results.Ok(GetRegistration(PeriodicTasksBuilder.TrimCommonSuffixes(name, true)));
 
     public IResult GetHistory(string name)
     {
+        name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
         var registration = GetRegistration(name);
         if (registration is null) return RegistrationNotFound(name);
 
@@ -33,6 +34,8 @@ internal class PeriodicTasksEndpointsHandler
     public async Task<IResult> ExecuteAsync(PeriodicTaskExecutionRequest request)
     {
         var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
+        name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
+
         var registration = GetRegistration(name);
         if (registration is null) return RegistrationNotFound(name);
 
