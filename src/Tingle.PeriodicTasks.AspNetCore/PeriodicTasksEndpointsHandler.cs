@@ -6,13 +6,11 @@ namespace Tingle.PeriodicTasks.AspNetCore;
 
 internal class PeriodicTasksEndpointsHandler
 {
-    private readonly IHttpContextAccessor contextAccessor;
     private readonly PeriodicTasksHostOptions hostOptions;
     private readonly IOptionsMonitor<PeriodicTaskOptions> optionsMonitor;
 
-    public PeriodicTasksEndpointsHandler(IHttpContextAccessor contextAccessor, IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
+    public PeriodicTasksEndpointsHandler(IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
     {
-        this.contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
         this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         hostOptions = hostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(hostOptionsAccessor));
     }
@@ -31,7 +29,7 @@ internal class PeriodicTasksEndpointsHandler
         return Results.Ok(attempts);
     }
 
-    public async Task<IResult> ExecuteAsync(PeriodicTaskExecutionRequest request)
+    public async Task<IResult> ExecuteAsync(HttpContext context, PeriodicTaskExecutionRequest request)
     {
         var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
         name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
@@ -40,7 +38,6 @@ internal class PeriodicTasksEndpointsHandler
         if (registration is null) return RegistrationNotFound(name);
 
         // find the task type
-        var context = GetHttpContext();
         var provider = context.RequestServices;
         var type = hostOptions.Registrations[name];
 
@@ -75,8 +72,6 @@ internal class PeriodicTasksEndpointsHandler
         }
         return results;
     }
-
-    private HttpContext GetHttpContext() => contextAccessor.HttpContext ?? throw new InvalidOperationException("HttpContext must be accessible");
 
     private static IResult RegistrationNotFound(string name)
     {

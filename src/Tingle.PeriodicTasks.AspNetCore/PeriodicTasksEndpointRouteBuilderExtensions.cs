@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Tingle.PeriodicTasks.AspNetCore;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -30,7 +31,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
         group.MapGet("/registrations/{name}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name))
              .WithDisplayName("periodic-tasks-history");
 
-        group.MapPost("/execute", (PeriodicTasksEndpointsHandler handler, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(request))
+        group.MapPost("/execute", (PeriodicTasksEndpointsHandler handler, HttpContext context, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(context, request))
              .WithDisplayName("periodic-tasks-execute");
 
         return group.WithGroupName("periodic-tasks");
