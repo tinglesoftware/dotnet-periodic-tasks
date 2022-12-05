@@ -25,6 +25,7 @@ internal class TriggerPeriodicTaskEventConsumer : IEventConsumer<TriggerPeriodic
         var request = context.Event;
 
         var name = request.Name ?? throw new InvalidOperationException("The request in the event must have a name");
+        name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
         if (!options.Registrations.TryGetValue(name, out var type))
         {
             logger.PeriodicTaskNotFound(name);
