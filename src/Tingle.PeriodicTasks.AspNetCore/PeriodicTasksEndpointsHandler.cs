@@ -63,7 +63,6 @@ internal class PeriodicTasksEndpointsHandler
 
     private List<PeriodicTaskRegistration> GetRegistrations()
     {
-        var provider = GetRequestServices();
         var registrations = hostOptions.Registrations;
         var results = new List<PeriodicTaskRegistration>();
         foreach (var (name, type) in registrations)
@@ -74,7 +73,6 @@ internal class PeriodicTasksEndpointsHandler
         return results;
     }
 
-    private IServiceProvider GetRequestServices() => GetHttpContext().RequestServices;
     private HttpContext GetHttpContext() => contextAccessor.HttpContext ?? throw new InvalidOperationException("HttpContext must be accessible");
 
     private static IResult RegistrationNotFound(string name)
