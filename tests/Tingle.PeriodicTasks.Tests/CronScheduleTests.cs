@@ -2,6 +2,17 @@
 
 public class CronScheduleTests
 {
+    [Theory]
+    [InlineData("14:10:54", "54 10 14 * * *")]
+    [InlineData("14:10", "* 10 14 * * *")]
+    [InlineData("14:00:54", "54 0 14 * * *")]
+    public void CanConvertFromTimeOnly(string input, string expected)
+    {
+        var to = TimeOnly.Parse(input);
+        var actual = ((CronSchedule)to).ToString();
+        Assert.Equal(expected, actual);
+    }
+
     [Fact]
     public void TestCompareEqual()
     {

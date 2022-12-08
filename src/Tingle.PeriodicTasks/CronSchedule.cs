@@ -71,6 +71,9 @@ public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
     /// <summary>Converts a <see cref="CronExpression"/> to a <see cref="CronSchedule"/>.</summary>
     public static implicit operator CronSchedule(CronExpression expression) => new(expression);
 
+    /// <summary>Converts a <see cref="TimeOnly"/> to a <see cref="CronSchedule"/>.</summary>
+    public static implicit operator CronSchedule(TimeOnly time) => new($"{(time.Second > 0 ? time.Second : "*")} {time.Minute} {time.Hour} * * *");
+
     #region IConvertible
 
     TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
