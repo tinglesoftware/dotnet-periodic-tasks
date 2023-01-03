@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.ComponentModel;
 using Tingle.PeriodicTasks;
 
@@ -7,10 +8,12 @@ namespace Microsoft.Extensions.DependencyInjection;
 internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
 {
     private readonly PeriodicTasksHostOptions tasksHostOptions;
+    private readonly IPeriodicTasksConfigurationProvider configurationProvider;
 
-    public PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor)
+    public PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor, IPeriodicTasksConfigurationProvider configurationProvider)
     {
         tasksHostOptions = tasksHostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(tasksHostOptionsAccessor));
+        this.configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
     }
 
     /// <inheritdoc/>
@@ -23,6 +26,9 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     public void Configure(string? name, PeriodicTaskOptions options)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
+
+        var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
+        configuration.Bind(options);
 
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
