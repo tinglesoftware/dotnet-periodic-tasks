@@ -78,6 +78,17 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
             return ValidateOptionsResult.Fail($"'{nameof(options.Timezone)}' must be provided.");
         }
 
+        // ensure we have a valid timezone
+        try
+        {
+            _ = TimeZoneInfo.FindSystemTimeZoneById(options.Timezone);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.Timezone)}' must be a valid Windows or IANA TimeZone identifier.");
+        }
+
+        // ensure deadline is not less than 1 minute
         if (options.Deadline < TimeSpan.FromMinutes(1))
         {
             return ValidateOptionsResult.Fail($"'{nameof(options.Deadline)}' must be greater than or equal to 1 minute.");

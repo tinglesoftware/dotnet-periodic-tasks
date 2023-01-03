@@ -27,6 +27,7 @@ public class ConfigurationTests
                 {
                     ["PeriodicTasks:LockNamePrefix"] = "random_prefix",
                     ["PeriodicTasks:Tasks:dummy:Description"] = "some description here",
+                    ["PeriodicTasks:Tasks:dummy:Timezone"] = "Africa/Nairobi",
                     ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:AwaitExecution"] = "false",
                     ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:Deadline"] = "00:15:00",
                     ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:ExecutionIdFormat"] = "Long",
@@ -50,6 +51,7 @@ public class ConfigurationTests
 
         var taskOptions = provider.GetRequiredService<IOptionsMonitor<PeriodicTaskOptions>>().Get(Assert.Single(hostOptions.Registrations.Keys));
         Assert.Equal("some description here", taskOptions.Description);
+        Assert.Equal("Africa/Nairobi", taskOptions.Timezone);
         Assert.False(taskOptions.AwaitExecution);
         Assert.Equal(TimeSpan.FromMinutes(15), taskOptions.Deadline);
         Assert.Equal(PeriodicTaskIdFormat.Long, taskOptions.ExecutionIdFormat);

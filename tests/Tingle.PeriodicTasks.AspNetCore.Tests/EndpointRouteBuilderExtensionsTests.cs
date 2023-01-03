@@ -24,7 +24,7 @@ public class EndpointRouteBuilderExtensionsTests
         LockTimeout = TimeSpan.Zero,
         Schedule = "0 0 * * * *",
         Deadline = TimeSpan.FromMinutes(59),
-        Timezone = "UTC",
+        Timezone = "Etc/UTC",
         ExecutionIdFormat = PeriodicTaskIdFormat.GuidNoDashes,
     };
 
