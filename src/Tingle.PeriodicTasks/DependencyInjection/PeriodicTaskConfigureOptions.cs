@@ -27,7 +27,13 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
+        // bind using the inferred/formatted name
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
+        configuration.Bind(options);
+
+        // bind using the full type name
+        var type = tasksHostOptions.Registrations[name];
+        configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
         configuration.Bind(options);
     }
 
