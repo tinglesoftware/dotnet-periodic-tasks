@@ -24,6 +24,7 @@ public class PeriodicTasksBuilder
         Services.ConfigureOptions<PeriodicTaskConfigureOptions>();
 
         // Register necessary services
+        Services.AddSingleton<IPeriodicTasksConfigurationProvider, DefaultPeriodicTasksConfigurationProvider>();
         Services.AddSingleton<IPeriodicTaskIdGenerator, PeriodicTaskIdGenerator>();
         Services.AddHostedService<PeriodicTasksHost>();
     }
