@@ -1,3 +1,10 @@
+# This Azure pipeline exists because secrets are not allowed for
+# private repositories on GitHub Organizations Free Tier.
+# We need secrets to publish to nuget since GitHub Workflows do not
+# have a concept of service connections.
+# Once this repository is made public, we can transition from Azure
+# Pipelines to GitHub Workflows.
+
 trigger:
   batch: true
   branches:
