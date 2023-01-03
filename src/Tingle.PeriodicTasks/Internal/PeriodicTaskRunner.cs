@@ -144,7 +144,13 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
             var retryPolicy = options.RetryPolicy;
             if (retryPolicy != null)
             {
-                await retryPolicy.ExecuteAsync(ct => task.ExecuteAsync(name, cts.Token), cancellationToken).ConfigureAwait(false);
+                var contextData = new Dictionary<string, object>
+                {
+                    ["execution-id"] = executionId,
+                    ["task-name"] = name,
+                    ["task-type"] = typeof(TTask).FullName ?? "<unknown>",
+                };
+                await retryPolicy.ExecuteAsync((ctx, ct) => task.ExecuteAsync(name, cts.Token), contextData, cancellationToken).ConfigureAwait(false);
             }
             else
             {
