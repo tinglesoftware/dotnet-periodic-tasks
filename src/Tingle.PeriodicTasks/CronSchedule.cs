@@ -1,8 +1,10 @@
 ﻿using Cronos;
+using System.ComponentModel;
 
 namespace Tingle.PeriodicTasks;
 
 /// <summary>Represents a CRON schedule.</summary>
+[TypeConverter(typeof(CronScheduleTypeConverter))]
 public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
 {
     ///
