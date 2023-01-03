@@ -116,7 +116,7 @@ stages:
           - download: current
             artifact: drop
 
-          - task: NuGetAuthenticate@0
+          - task: NuGetAuthenticate@1
             displayName: 'NuGet Authenticate'
 
           - task: NuGetCommand@2
