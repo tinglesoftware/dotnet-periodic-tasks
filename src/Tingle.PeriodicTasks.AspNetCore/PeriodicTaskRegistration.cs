@@ -12,7 +12,7 @@ internal sealed record PeriodicTaskRegistration
         Enable = options.Enable;
         ExecuteOnStartup = options.ExecuteOnStartup;
         Schedule = options.Schedule.ToString();
-        Timezone = options.Timezone.Id;
+        Timezone = options.Timezone;
         LockTimeout = options.LockTimeout;
         AwaitExecution = options.AwaitExecution;
         Deadline = options.Deadline;

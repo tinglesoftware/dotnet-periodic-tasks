@@ -53,7 +53,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         var schedule = options.Schedule;
         while (!cancellationToken.IsCancellationRequested)
         {
-            var timezone = options.Timezone;
+            var timezone = TimeZoneInfo.FindSystemTimeZoneById(options.Timezone);
             var next = schedule.GetNextOccurrence(DateTimeOffset.UtcNow, timezone);
             if (next is null)
             {

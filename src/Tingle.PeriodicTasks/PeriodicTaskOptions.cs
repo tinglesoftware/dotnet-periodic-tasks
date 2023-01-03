@@ -36,11 +36,11 @@ public class PeriodicTaskOptions
     public CronSchedule Schedule { get; set; } = CronSchedule.Hourly;
 
     /// <summary>
-    /// Gets or sets the <see cref="TimeZoneInfo"/> in which the
+    /// Gets or sets the TimeZone identifier in which the
     /// <see cref="Schedule"/> will operate.
-    /// Defaults to <see cref="TimeZoneInfo.Utc"/>.
+    /// Defaults to <c>Etc/UTC</c>.
     /// </summary>
-    public TimeZoneInfo Timezone { get; set; } = TimeZoneInfo.Utc;
+    public string Timezone { get; set; } = "Etc/UTC";
 
     /// <summary>
     /// Gets or sets how long to wait before giving up on lock acquisition.

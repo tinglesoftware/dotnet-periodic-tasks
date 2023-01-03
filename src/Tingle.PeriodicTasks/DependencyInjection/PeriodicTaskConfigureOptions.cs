@@ -1,16 +1,19 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.ComponentModel;
 using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
+internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IPostConfigureOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
 {
     private readonly PeriodicTasksHostOptions tasksHostOptions;
+    private readonly IPeriodicTasksConfigurationProvider configurationProvider;
 
-    public PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor)
+    public PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor, IPeriodicTasksConfigurationProvider configurationProvider)
     {
         tasksHostOptions = tasksHostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(tasksHostOptionsAccessor));
+        this.configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
     }
 
     /// <inheritdoc/>
@@ -24,15 +27,32 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
+        // bind using the inferred/formatted name
+        var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
+        configuration.Bind(options);
+
+        // bind using the full type name
+        var type = tasksHostOptions.Registrations[name];
+        configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
+        configuration.Bind(options);
+    }
+
+    public void PostConfigure(string? name, PeriodicTaskOptions options)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(name);
+
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
 
-        // try configure the description
-        var type = tasksHostOptions.Registrations[name];
-        var attrs = type.GetCustomAttributes(false);
-        options.Description ??= attrs.OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
-                             ?? attrs.OfType<DescriptionAttribute>().SingleOrDefault()?.Description
-                             ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
+        // try configure the description if null
+        if (options.Description is null)
+        {
+            var type = tasksHostOptions.Registrations[name];
+            var attrs = type.GetCustomAttributes(false);
+            options.Description = attrs.OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
+                               ?? attrs.OfType<DescriptionAttribute>().SingleOrDefault()?.Description
+                               ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
+        }
     }
 
     /// <inheritdoc/>
@@ -58,6 +78,17 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
             return ValidateOptionsResult.Fail($"'{nameof(options.Timezone)}' must be provided.");
         }
 
+        // ensure we have a valid timezone
+        try
+        {
+            _ = TimeZoneInfo.FindSystemTimeZoneById(options.Timezone);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.Timezone)}' must be a valid Windows or IANA TimeZone identifier.");
+        }
+
+        // ensure deadline is not less than 1 minute
         if (options.Deadline < TimeSpan.FromMinutes(1))
         {
             return ValidateOptionsResult.Fail($"'{nameof(options.Deadline)}' must be greater than or equal to 1 minute.");
