@@ -79,7 +79,7 @@ public class PeriodicTaskOptions
     /// <summary>
     /// The retry policy to apply when executing the job.
     /// This is an outer wrapper around the
-    /// <see cref="IPeriodicTask.ExecuteAsync(string, CancellationToken)"/>
+    /// <see cref="IPeriodicTask.ExecuteAsync(PeriodicTaskExecutionContext, CancellationToken)"/>
     /// method.
     /// When set to <see langword="null"/>, the method is only invoked once.
     /// Defaults to <see langword="null"/>.

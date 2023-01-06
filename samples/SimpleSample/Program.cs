@@ -38,7 +38,7 @@ class DatabaseCleanerTask : IPeriodicTask
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Cleaned up old records from the database");
         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
@@ -54,7 +54,7 @@ class DnsCheckerTask : IPeriodicTask
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("All DNS records are fine");
         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
