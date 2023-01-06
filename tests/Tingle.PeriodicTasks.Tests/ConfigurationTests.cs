@@ -60,6 +60,6 @@ public class ConfigurationTests
 
     class DummyTask : IPeriodicTask
     {
-        public Task ExecuteAsync(string name, CancellationToken cancellationToken) => throw new NotImplementedException();
+        public Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 }

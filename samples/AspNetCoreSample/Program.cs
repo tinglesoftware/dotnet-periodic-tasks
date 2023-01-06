@@ -34,7 +34,7 @@ class CookingTask : IPeriodicTask
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("The food is ready to eat");
         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
@@ -50,7 +50,7 @@ class WashingTask : IPeriodicTask
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("I will do the cleaning later. Have you eaten yet?");
         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);

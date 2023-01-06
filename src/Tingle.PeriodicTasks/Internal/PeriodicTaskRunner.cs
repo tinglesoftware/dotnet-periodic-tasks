@@ -140,21 +140,18 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
 
             var task = ActivatorUtilities.GetServiceOrCreateInstance<TTask>(provider);
 
+            var context = new PeriodicTaskExecutionContext(name, executionId) { TaskType = typeof(TTask), };
+
             // Invoke handler method, with retry if specified
             var retryPolicy = options.RetryPolicy;
             if (retryPolicy != null)
             {
-                var contextData = new Dictionary<string, object>
-                {
-                    ["execution-id"] = executionId,
-                    ["task-name"] = name,
-                    ["task-type"] = typeof(TTask).FullName ?? "<unknown>",
-                };
-                await retryPolicy.ExecuteAsync((ctx, ct) => task.ExecuteAsync(name, cts.Token), contextData, cancellationToken).ConfigureAwait(false);
+                var contextData = new Dictionary<string, object> { ["context"] = context, };
+                await retryPolicy.ExecuteAsync((ctx, ct) => task.ExecuteAsync(context, cts.Token), contextData, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                await task.ExecuteAsync(name, cts.Token).ConfigureAwait(false);
+                await task.ExecuteAsync(context, cts.Token).ConfigureAwait(false);
             }
         }
         catch (Exception ex)
