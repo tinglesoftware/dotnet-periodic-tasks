@@ -33,6 +33,22 @@ internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTas
             return ValidateOptionsResult.Fail($"'{nameof(options.LockNamePrefix)}' must be provided.");
         }
 
+        // ensure we have a default timezone
+        if (string.IsNullOrWhiteSpace(options.DefaultTimezone))
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.DefaultTimezone)}' must be provided.");
+        }
+
+        // ensure we have a valid default timezone
+        try
+        {
+            _ = TimeZoneInfo.FindSystemTimeZoneById(options.DefaultTimezone);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.DefaultTimezone)}' must be a valid Windows or IANA TimeZone identifier.");
+        }
+
         return ValidateOptionsResult.Success;
     }
 }

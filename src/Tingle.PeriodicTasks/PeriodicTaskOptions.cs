@@ -1,4 +1,5 @@
-﻿using Polly.Retry;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Polly.Retry;
 
 namespace Tingle.PeriodicTasks;
 
@@ -36,11 +37,12 @@ public class PeriodicTaskOptions
     public CronSchedule Schedule { get; set; } = CronSchedule.Hourly;
 
     /// <summary>
-    /// Gets or sets the TimeZone identifier in which the
-    /// <see cref="Schedule"/> will operate.
-    /// Defaults to <c>Etc/UTC</c>.
+    /// Gets or sets the TimeZone identifier in which the <see cref="Schedule"/> will operate.
+    /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultTimezone"/> is used.
+    /// <br/>
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    public string Timezone { get; set; } = "Etc/UTC";
+    public string? Timezone { get; set; }
 
     /// <summary>
     /// Gets or sets how long to wait before giving up on lock acquisition.

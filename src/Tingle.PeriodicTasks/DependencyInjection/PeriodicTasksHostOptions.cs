@@ -27,6 +27,13 @@ public class PeriodicTasksHostOptions
     /// </summary>
     public AsyncRetryPolicy? DefaultRetryPolicy { get; set; }
 
+    /// <summary>
+    /// Gets or sets the default TimeZone identifier to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.Timezone"/> option.
+    /// Defaults to <c>Etc/UTC</c>.
+    /// </summary>
+    public string DefaultTimezone { get; set; } = "Etc/UTC";
+
     /// <summary>The periodic tasks registered.</summary>
     public IReadOnlyDictionary<string, Type> Registrations => registrations;
 

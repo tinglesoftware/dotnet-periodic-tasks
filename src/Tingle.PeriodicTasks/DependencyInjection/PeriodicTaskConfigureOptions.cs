@@ -42,6 +42,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         ArgumentException.ThrowIfNullOrEmpty(name);
 
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
+        options.Timezone ??= tasksHostOptions.DefaultTimezone;
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
 
         // try configure the description if null
