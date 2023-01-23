@@ -83,10 +83,10 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
 
         // create linked CancellationTokenSource and attach deadline if not null
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        cts.CancelAfter(options.Deadline);
+        cts.CancelAfter(options.Deadline!.Value);
 
         // execute the task
-        var id = idGenerator.Generate(name, options.ExecutionIdFormat);
+        var id = idGenerator.Generate(name, options.ExecutionIdFormat!.Value);
         var t = ExecuteInnerAsync(executionId: id,
                                   name: name,
                                   options: options,
@@ -115,7 +115,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
     {
         var start = DateTimeOffset.UtcNow;
         var lockName = options.LockName!;
-        var lockTimeout = options.LockTimeout;
+        var lockTimeout = options.LockTimeout!.Value;
 
         // acquire a distributed lock
         logger.AcquiringDistributedLock(lockName, executionId);

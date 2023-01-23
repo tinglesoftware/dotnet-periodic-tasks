@@ -41,6 +41,27 @@ public class PeriodicTasksHostOptions
     /// </summary>
     public string DefaultTimezone { get; set; } = "Etc/UTC";
 
+    /// <summary>
+    /// Gets or sets the default lock acquisition wait time to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.LockTimeout"/> option.
+    /// Defaults to <see cref="TimeSpan.Zero"/>.
+    /// </summary>
+    public TimeSpan DefaultLockTimeout { get; set; } = TimeSpan.Zero;
+
+    /// <summary>
+    /// Gets or sets the default maximum amount of the time for a single execution to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.Deadline"/> option.
+    /// Defaults to <c>59 minutes</c>.
+    /// </summary>
+    public TimeSpan DefaultDeadline { get; set; } = TimeSpan.FromMinutes(59);
+
+    /// <summary>
+    /// Gets or sets the default format for execution identifiers to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.ExecutionIdFormat"/> option.
+    /// Defaults to <see cref="PeriodicTaskIdFormat.GuidNoDashes"/>.
+    /// </summary>
+    public PeriodicTaskIdFormat DefaultExecutionIdFormat { get; set; } = PeriodicTaskIdFormat.GuidNoDashes;
+
     /// <summary>The periodic tasks registered.</summary>
     public IReadOnlyDictionary<string, Type> Registrations => registrations;
 

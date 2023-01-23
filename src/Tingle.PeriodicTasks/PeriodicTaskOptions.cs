@@ -35,7 +35,6 @@ public class PeriodicTaskOptions
     /// A value can be also be configured via <see cref="PeriodicTaskScheduleAttribute"/> on the task.
     /// <br/>
     /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultSchedule"/> is used.
-    /// <br/>
     /// Defaults to <see langword="null"/>.
     /// </summary>
     public CronSchedule? Schedule { get; set; }
@@ -45,16 +44,17 @@ public class PeriodicTaskOptions
     /// A value can be also be configured via <see cref="PeriodicTaskScheduleAttribute"/> on the task.
     /// <br/>
     /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultTimezone"/> is used.
-    /// <br/>
     /// Defaults to <see langword="null"/>.
     /// </summary>
     public string? Timezone { get; set; }
 
     /// <summary>
     /// Gets or sets how long to wait before giving up on lock acquisition.
-    /// Defaults to <see cref="TimeSpan.Zero"/>.
+    /// <br/>
+    /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultLockTimeout"/> is used.
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    public TimeSpan LockTimeout { get; set; } = TimeSpan.Zero;
+    public TimeSpan? LockTimeout { get; set; }
 
     /// <summary>
     /// Gets or sets whether the task execution should be awaited in the
@@ -69,15 +69,18 @@ public class PeriodicTaskOptions
     /// <summary>
     /// Gets or sets the maximum amount of the time a single execution of the task is allowed to run.
     /// <br/>
-    /// Defaults to <c>59 minutes</c>.
+    /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultDeadline"/> is used.
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    public TimeSpan Deadline { get; set; } = TimeSpan.FromMinutes(59);
+    public TimeSpan? Deadline { get; set; }
 
     /// <summary>
     /// The preferred format to use when generating identifiers for executions.
-    /// Defaults to <see cref="PeriodicTaskIdFormat.GuidNoDashes"/>.
+    /// <br/>
+    /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultExecutionIdFormat"/> is used.
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    public PeriodicTaskIdFormat ExecutionIdFormat { get; set; } = PeriodicTaskIdFormat.GuidNoDashes;
+    public PeriodicTaskIdFormat? ExecutionIdFormat { get; set; }
 
     /// <summary>
     /// The name of the distributed lock to be acquired during execution.

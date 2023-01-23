@@ -11,7 +11,7 @@ internal sealed record PeriodicTaskRegistration
         Description = options.Description;
         Enable = options.Enable;
         ExecuteOnStartup = options.ExecuteOnStartup;
-        Schedule = options.Schedule.ToString();
+        Schedule = options.Schedule?.ToString();
         Timezone = options.Timezone;
         LockTimeout = options.LockTimeout;
         AwaitExecution = options.AwaitExecution;
@@ -29,7 +29,7 @@ internal sealed record PeriodicTaskRegistration
     public string? Timezone { get; set; }
     public TimeSpan? LockTimeout { get; set; }
     public bool AwaitExecution { get; set; }
-    public TimeSpan Deadline { get; set; }
-    public PeriodicTaskIdFormat ExecutionIdFormat { get; set; }
+    public TimeSpan? Deadline { get; set; }
+    public PeriodicTaskIdFormat? ExecutionIdFormat { get; set; }
     public string? LockName { get; set; }
 }

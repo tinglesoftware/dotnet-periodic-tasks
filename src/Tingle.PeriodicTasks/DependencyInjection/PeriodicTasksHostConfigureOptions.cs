@@ -55,6 +55,12 @@ internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTas
             return ValidateOptionsResult.Fail($"'{nameof(options.DefaultTimezone)}' must be a valid Windows or IANA TimeZone identifier.");
         }
 
+        // ensure the default deadline is not less than 1 minute
+        if (options.DefaultDeadline < TimeSpan.FromMinutes(1))
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.DefaultDeadline)}' must be greater than or equal to 1 minute.");
+        }
+
         return ValidateOptionsResult.Success;
     }
 }

@@ -57,6 +57,9 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
         options.Schedule ??= tasksHostOptions.DefaultSchedule;
         options.Timezone ??= tasksHostOptions.DefaultTimezone;
+        options.LockTimeout ??= tasksHostOptions.DefaultLockTimeout;
+        options.Deadline ??= tasksHostOptions.DefaultDeadline;
+        options.ExecutionIdFormat ??= tasksHostOptions.DefaultExecutionIdFormat;
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
     }
 
