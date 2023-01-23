@@ -32,7 +32,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         var attrs = type.GetCustomAttributes(false);
         if (attrs.OfType<PeriodicTaskScheduleAttribute>().SingleOrDefault() is PeriodicTaskScheduleAttribute attrSchedule)
         {
-            options.Schedule = attrSchedule.Schedule;
+            options.Schedule ??= attrSchedule.Schedule;
             options.Timezone ??= attrSchedule.Timezone;
         }
 
@@ -55,6 +55,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         ArgumentException.ThrowIfNullOrEmpty(name);
 
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
+        options.Schedule ??= tasksHostOptions.DefaultSchedule;
         options.Timezone ??= tasksHostOptions.DefaultTimezone;
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
     }
@@ -71,7 +72,7 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         }
 
         // ensure we have a schedule
-        if (options.Schedule == default)
+        if (options.Schedule is null)
         {
             return ValidateOptionsResult.Fail($"'{nameof(options.Schedule)}' must be provided.");
         }

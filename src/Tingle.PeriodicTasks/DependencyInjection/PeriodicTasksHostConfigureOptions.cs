@@ -33,6 +33,12 @@ internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTas
             return ValidateOptionsResult.Fail($"'{nameof(options.LockNamePrefix)}' must be provided.");
         }
 
+        // ensure we have a default schedule
+        if (options.DefaultSchedule == default)
+        {
+            return ValidateOptionsResult.Fail($"'{nameof(options.DefaultSchedule)}' must be provided.");
+        }
+
         // ensure we have a default timezone
         if (string.IsNullOrWhiteSpace(options.DefaultTimezone))
         {

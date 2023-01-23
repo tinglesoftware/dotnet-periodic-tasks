@@ -28,6 +28,13 @@ public class PeriodicTasksHostOptions
     public AsyncRetryPolicy? DefaultRetryPolicy { get; set; }
 
     /// <summary>
+    /// Gets or sets the default <see cref="CronSchedule"/> to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.Schedule"/> option.
+    /// Defaults to <see cref="CronSchedule.Hourly"/> which implies every top of the hour, every day.
+    /// </summary>
+    public CronSchedule DefaultSchedule { get; set; } = CronSchedule.Hourly;
+
+    /// <summary>
     /// Gets or sets the default TimeZone identifier to use for periodic tasks where it is not specified.
     /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.Timezone"/> option.
     /// Defaults to <c>Etc/UTC</c>.

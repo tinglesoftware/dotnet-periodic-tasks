@@ -31,12 +31,14 @@ public class PeriodicTaskOptions
     public virtual bool ExecuteOnStartup { get; set; }
 
     /// <summary>
-    /// Gets or sets the execution schedule. Defaults to <see cref="CronSchedule.Hourly"/>
-    /// which implies every top of the hour, every day
-    /// <br/>
+    /// Gets or sets the execution schedule.
     /// A value can be also be configured via <see cref="PeriodicTaskScheduleAttribute"/> on the task.
+    /// <br/>
+    /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultSchedule"/> is used.
+    /// <br/>
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    public CronSchedule Schedule { get; set; } = CronSchedule.Hourly;
+    public CronSchedule? Schedule { get; set; }
 
     /// <summary>
     /// Gets or sets the TimeZone identifier in which the <see cref="Schedule"/> will operate.

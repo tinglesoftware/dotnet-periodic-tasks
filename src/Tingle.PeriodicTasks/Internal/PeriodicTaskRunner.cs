@@ -50,7 +50,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
             await ExecuteAsync(name, cancellationToken).ConfigureAwait(false);
         }
 
-        var schedule = options.Schedule;
+        var schedule = options.Schedule!.Value;
         var timezone = TimeZoneInfo.FindSystemTimeZoneById(options.Timezone!);
         while (!cancellationToken.IsCancellationRequested)
         {
