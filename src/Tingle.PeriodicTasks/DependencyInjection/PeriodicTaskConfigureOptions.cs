@@ -36,6 +36,11 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
             options.Timezone ??= attrSchedule.Timezone;
         }
 
+        // set description from Attribute if null
+        options.Description ??= attrs.OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
+                             ?? attrs.OfType<DescriptionAttribute>().SingleOrDefault()?.Description
+                             ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
+
         // bind using the inferred/formatted name
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
         configuration.Bind(options);
@@ -52,16 +57,6 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         options.LockName ??= $"{tasksHostOptions.LockNamePrefix}:{name}";
         options.Timezone ??= tasksHostOptions.DefaultTimezone;
         options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
-
-        // try configure the description if null
-        if (options.Description is null)
-        {
-            var type = tasksHostOptions.Registrations[name];
-            var attrs = type.GetCustomAttributes(false);
-            options.Description = attrs.OfType<PeriodicTaskDescriptionAttribute>().SingleOrDefault()?.Description
-                               ?? attrs.OfType<DescriptionAttribute>().SingleOrDefault()?.Description
-                               ?? string.Empty; // makes sure it is visible in AspNetCore endpoint responses
-        }
     }
 
     /// <inheritdoc/>

@@ -9,7 +9,7 @@ public sealed class PeriodicTaskDescriptionAttribute : Attribute
     ///
     public PeriodicTaskDescriptionAttribute(string description)
     {
-        this.Description = description ?? throw new ArgumentNullException(nameof(description));
+        Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
     ///

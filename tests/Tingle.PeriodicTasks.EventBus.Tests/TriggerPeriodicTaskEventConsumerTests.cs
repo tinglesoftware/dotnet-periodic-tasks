@@ -67,7 +67,6 @@ public class TriggerPeriodicTaskEventConsumerTests
         }
     }
 
-    [PeriodicTaskDescription("some description here")]
     class DummyTask : IPeriodicTask
     {
         private readonly ILogger logger;
