@@ -33,11 +33,15 @@ public class PeriodicTaskOptions
     /// <summary>
     /// Gets or sets the execution schedule. Defaults to <see cref="CronSchedule.Hourly"/>
     /// which implies every top of the hour, every day
+    /// <br/>
+    /// A value can be also be configured via <see cref="PeriodicTaskScheduleAttribute"/> on the task.
     /// </summary>
     public CronSchedule Schedule { get; set; } = CronSchedule.Hourly;
 
     /// <summary>
     /// Gets or sets the TimeZone identifier in which the <see cref="Schedule"/> will operate.
+    /// A value can be also be configured via <see cref="PeriodicTaskScheduleAttribute"/> on the task.
+    /// <br/>
     /// When set to <see langword="null"/>, <see cref="PeriodicTasksHostOptions.DefaultTimezone"/> is used.
     /// <br/>
     /// Defaults to <see langword="null"/>.

@@ -22,9 +22,9 @@ public class EndpointRouteBuilderExtensionsTests
         ExecuteOnStartup = false,
         LockName = (typeof(DummyTask).Assembly.GetName().Name + ":dummy").ToLower(),
         LockTimeout = TimeSpan.Zero,
-        Schedule = "0 0 * * * *",
+        Schedule = "0 10,40 * * * *",
         Deadline = TimeSpan.FromMinutes(59),
-        Timezone = "Etc/UTC",
+        Timezone = "Africa/Nairobi",
         ExecutionIdFormat = PeriodicTaskIdFormat.GuidNoDashes,
     };
 
@@ -212,6 +212,7 @@ public class EndpointRouteBuilderExtensionsTests
         Assert.Equal(0, response.Content.Headers.ContentLength);
     }
 
+    [PeriodicTaskSchedule("10,40 * * * *", "Africa/Nairobi")]
     [PeriodicTaskDescription("some description here")]
     class DummyTask : IPeriodicTask
     {
