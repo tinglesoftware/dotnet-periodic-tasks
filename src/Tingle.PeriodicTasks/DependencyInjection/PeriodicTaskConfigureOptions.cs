@@ -27,12 +27,20 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
+        // set schedule and timezone from Attribute
+        var type = tasksHostOptions.Registrations[name];
+        var attrs = type.GetCustomAttributes(false);
+        if (attrs.OfType<PeriodicTaskScheduleAttribute>().SingleOrDefault() is PeriodicTaskScheduleAttribute attrSchedule)
+        {
+            options.Schedule = attrSchedule.Schedule;
+            options.Timezone ??= attrSchedule.Timezone;
+        }
+
         // bind using the inferred/formatted name
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
         configuration.Bind(options);
 
         // bind using the full type name
-        var type = tasksHostOptions.Registrations[name];
         configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
         configuration.Bind(options);
     }
