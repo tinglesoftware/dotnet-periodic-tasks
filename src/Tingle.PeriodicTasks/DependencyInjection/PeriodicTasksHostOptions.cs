@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Polly.Retry;
+using Polly;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.Internal;
 
@@ -25,7 +25,7 @@ public class PeriodicTasksHostOptions
     /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.RetryPolicy"/> option.
     /// Defaults to <see langword="null"/>.
     /// </summary>
-    public AsyncRetryPolicy? DefaultRetryPolicy { get; set; }
+    public AsyncPolicy? DefaultRetryPolicy { get; set; }
 
     /// <summary>
     /// Gets or sets the default <see cref="CronSchedule"/> to use for periodic tasks where it is not specified.

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Polly.Retry;
+using Polly;
 
 namespace Tingle.PeriodicTasks;
 
@@ -100,5 +100,5 @@ public class PeriodicTaskOptions
     /// When a value is provided, the host may extend the duration of the distributed for the task
     /// until the execution with retry policy completes successfully or not.
     /// </remarks>
-    public AsyncRetryPolicy? RetryPolicy { get; set; }
+    public AsyncPolicy? RetryPolicy { get; set; }
 }
