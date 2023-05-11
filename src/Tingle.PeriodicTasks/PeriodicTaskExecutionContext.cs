@@ -30,5 +30,5 @@ public class PeriodicTaskExecutionContext
     public string ExecutionId { get; }
 
     /// <summary>Periodic task type.</summary>
-    public required Type TaskType { get; init; }
+    public Type? TaskType { get; init; }
 }
