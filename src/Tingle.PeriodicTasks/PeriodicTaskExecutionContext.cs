@@ -3,8 +3,16 @@
 /// <summary>Represents the context for the current execution of a period task.</summary>
 public class PeriodicTaskExecutionContext
 {
-    ///
-    internal PeriodicTaskExecutionContext(string name, string executionId)
+    /// <summary>
+    /// Creates and instance of <see cref="PeriodicTaskExecutionContext"/>.
+    /// </summary>
+    /// <param name="name">
+    /// Name of the periodic task.
+    /// This value is different for tasks of the same type but multiple registrations.
+    /// </param>
+    /// <param name="executionId">Unique identifier of the execution.</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public PeriodicTaskExecutionContext(string name, string executionId)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         ExecutionId = executionId ?? throw new ArgumentNullException(nameof(executionId));
