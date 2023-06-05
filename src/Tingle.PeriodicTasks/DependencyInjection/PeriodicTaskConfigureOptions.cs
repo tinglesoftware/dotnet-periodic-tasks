@@ -45,6 +45,8 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
         configuration.Bind(options);
 
+        // binding using short name is not done because it may result in duplicates
+
         // bind using the full type name
         configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
         configuration.Bind(options);
