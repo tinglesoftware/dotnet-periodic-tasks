@@ -18,6 +18,9 @@ public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
     ///
     public static readonly CronSchedule Hourly = new("0 * * * *");
 
+    ///
+    public static CronSchedule RandomHourly() => new($"{Random.Shared.Next(0, 59)} * * * *");
+
     private readonly CronExpression expression;
 
     /// <summary>Creates an instance of <see cref="CronSchedule"/>.</summary>
@@ -29,9 +32,7 @@ public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
         this.expression = expression ?? throw new ArgumentNullException(nameof(expression));
     }
 
-    /// <summary>
-    /// Calculates next occurrence starting after <paramref name="from"/> in given <paramref name="zone"/>.
-    /// </summary>
+    /// <summary>Calculates next occurrence starting after <paramref name="from"/> in the given <paramref name="zone"/>.</summary>
     /// <param name="from"></param>
     /// <param name="zone"></param>
     /// <returns></returns>

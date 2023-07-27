@@ -14,6 +14,25 @@ public class CronScheduleTests
     }
 
     [Fact]
+    public void RandomHourly_Works()
+    {
+        var values = Enumerable.Range(0, 10).Select(_ => CronSchedule.RandomHourly()).ToList();
+
+        Assert.All(values, exp =>
+        {
+            // Ensure format is matched first zero is millisecond
+            Assert.Matches(@"^0 [0-9]{1,2} \* \* \* \*$", exp);
+
+            // Ensure the next occurence is less than 2 hours away
+            var now = DateTimeOffset.UtcNow;
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Etc/UTC");
+            var next = exp.GetNextOccurrence(now, tz);
+            Assert.NotNull(next);
+            Assert.InRange((next!.Value - now).TotalHours, 0.0f, 2.0f);
+        });
+    }
+
+    [Fact]
     public void TestCompareEqual()
     {
         var id1 = new CronSchedule("0 0 * * * *");
