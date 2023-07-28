@@ -23,7 +23,7 @@ public class CronScheduleTests
             // Ensure format is matched first zero is millisecond
             Assert.Matches(@"^0 [0-9]{1,2} \* \* \* \*$", exp);
 
-            // Ensure the next occurence is less than 2 hours away
+            // Ensure the next occurrence is less than 2 hours away
             var now = DateTimeOffset.UtcNow;
             var tz = TimeZoneInfo.FindSystemTimeZoneById("Etc/UTC");
             var next = exp.GetNextOccurrence(now, tz);
