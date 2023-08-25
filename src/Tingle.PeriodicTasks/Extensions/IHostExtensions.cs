@@ -61,8 +61,12 @@ public static class IHostExtensions
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(name);
 
+        // Create scoped provider so that services can be disposed at the end.
+        // This is useful for scenarios such as logging.
+        using var scope = host.Services.CreateScope();
+        var provider = scope.ServiceProvider;
+
         // find the task registration
-        var provider = host.Services;
         var options = provider.GetRequiredService<IOptions<PeriodicTasksHostOptions>>().Value;
         name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
         if (!options.Registrations.TryGetValue(name, out var type))
