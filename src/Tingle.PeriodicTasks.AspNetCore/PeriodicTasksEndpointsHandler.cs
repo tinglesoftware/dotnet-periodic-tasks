@@ -48,11 +48,10 @@ internal class PeriodicTasksEndpointsHandler
 
         // execute
         var cancellationToken = context.RequestAborted;
-        var t = runner.ExecuteAsync(name: name, throwOnError: request.Throw, cancellationToken: cancellationToken);
-        if (request.Wait)
-        {
-            await t.ConfigureAwait(false);
-        }
+        await runner.ExecuteAsync(name: name,
+                                  throwOnError: request.Throw,
+                                  awaitExecution: request.Wait,
+                                  cancellationToken: cancellationToken).ConfigureAwait(false);
 
         PeriodicTaskExecutionAttempt? attempt = null; // when attempt is offered, use it
         return Results.Ok(attempt);

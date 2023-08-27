@@ -14,14 +14,22 @@ public static class IHostExtensions
     /// If none is present or if <see langowrd="null"/>, the host is run instead using <c>host.RunAsync(cancellationToken)</c>.
     /// </summary>
     /// <param name="host">The <see cref="IHost"/> to use.</param>
+    /// <param name="throwOnError">Whether to throw an exception on failure.</param>
+    /// <param name="awaitExecution">
+    /// Gets or sets whether the task execution should be awaited.
+    /// This overrides the value in <see cref="PeriodicTaskOptions.AwaitExecution"/>.
+    /// </param>
     /// <param name="cancellationToken">The token to trigger termination or shutdown.</param>
     /// <returns></returns>
-    public static Task RunOrExecutePeriodicTaskAsync(this IHost host, CancellationToken cancellationToken = default)
+    public static Task RunOrExecutePeriodicTaskAsync(this IHost host,
+                                                     bool throwOnError = true,
+                                                     bool? awaitExecution = null,
+                                                     CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(host);
 
         return host.TryGetPeriodicTaskName(out var taskName)
-            ? host.ExecutePeriodicTaskAsync(taskName, cancellationToken)
+            ? host.ExecutePeriodicTaskAsync(taskName, throwOnError, awaitExecution, cancellationToken)
             : host.RunAsync(cancellationToken);
     }
 
@@ -36,7 +44,7 @@ public static class IHostExtensions
     /// This parameter is passed uninitialized.
     /// <br/>
     /// This value can be used with
-    /// <see cref="ExecutePeriodicTaskAsync(IHost, string, CancellationToken)"/>.
+    /// <see cref="ExecutePeriodicTaskAsync(IHost, string, bool, bool?, CancellationToken)"/>.
     /// </param>
     /// <returns>
     /// <see langword="true"/> if the <see cref="IConfiguration"/> used by the <see cref="IHost"/>
@@ -54,9 +62,18 @@ public static class IHostExtensions
     /// <summary>Execute a periodic task.</summary>
     /// <param name="host">The <see cref="IHost"/> to use.</param>
     /// <param name="name">The name of the periodic task.</param>
+    /// <param name="throwOnError">Whether to throw an exception on failure.</param>
+    /// <param name="awaitExecution">
+    /// Gets or sets whether the task execution should be awaited.
+    /// This overrides the value in <see cref="PeriodicTaskOptions.AwaitExecution"/>.
+    /// </param>
     /// <param name="cancellationToken">The token to trigger termination.</param>
     /// <returns></returns>
-    public static Task ExecutePeriodicTaskAsync(this IHost host, string name, CancellationToken cancellationToken = default)
+    public static Task ExecutePeriodicTaskAsync(this IHost host,
+                                                string name,
+                                                bool throwOnError = true,
+                                                bool? awaitExecution = null,
+                                                CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(name);
@@ -85,6 +102,9 @@ public static class IHostExtensions
         var genericRunnerType = typeof(IPeriodicTaskRunner<>);
         var runnerType = genericRunnerType.MakeGenericType(type);
         var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
-        return runner.ExecuteAsync(name: name, throwOnError: true, cancellationToken: cts.Token);
+        return runner.ExecuteAsync(name: name,
+                                   throwOnError: throwOnError,
+                                   awaitExecution: awaitExecution,
+                                   cancellationToken: cts.Token);
     }
 }

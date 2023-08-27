@@ -38,10 +38,9 @@ internal class TriggerPeriodicTaskEventConsumer : IEventConsumer<TriggerPeriodic
         var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
 
         // execute
-        var t = runner.ExecuteAsync(name: name, throwOnError: request.Throw, cancellationToken: cancellationToken);
-        if (request.Wait)
-        {
-            await t.ConfigureAwait(false);
-        }
+        await runner.ExecuteAsync(name: name,
+                                  throwOnError: request.Throw,
+                                  awaitExecution: request.Wait,
+                                  cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

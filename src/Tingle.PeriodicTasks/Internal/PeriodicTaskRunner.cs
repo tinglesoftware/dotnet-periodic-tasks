@@ -75,9 +75,9 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
     }
 
     public Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
-        => ExecuteAsync(name: name, throwOnError: false, cancellationToken: cancellationToken);
+        => ExecuteAsync(name: name, throwOnError: false, awaitExecution: null, cancellationToken: cancellationToken);
 
-    public async Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(string name, bool throwOnError, bool? awaitExecution, CancellationToken cancellationToken = default)
     {
         var options = optionsMonitor.Get(name);
 
@@ -93,7 +93,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
                                   throwOnError: throwOnError,
                                   cancellationToken: cts.Token);
 
-        if (options.AwaitExecution)
+        if (awaitExecution ?? options.AwaitExecution)
         {
             try
             {
@@ -157,11 +157,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         catch (Exception ex)
         {
             Interlocked.Exchange(ref caught, ex);
-
-            if (!throwOnError)
-            {
-                logger.ExceptionInPeriodicTask(ex, executionId);
-            }
+            logger.ExceptionInPeriodicTask(ex, executionId);
         }
 
         var end = DateTimeOffset.UtcNow;
