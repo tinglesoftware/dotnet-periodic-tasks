@@ -34,7 +34,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task RunAsync(string name, CancellationToken cancellationToken)
+    public async Task RunAsync(string name, CancellationToken cancellationToken = default)
     {
         var options = optionsMonitor.Get(name);
 
@@ -74,10 +74,10 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
     }
 
-    public Task ExecuteAsync(string name, CancellationToken cancellationToken)
+    public Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
         => ExecuteAsync(name: name, throwOnError: false, cancellationToken: cancellationToken);
 
-    public async Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken)
+    public async Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken = default)
     {
         var options = optionsMonitor.Get(name);
 
@@ -111,7 +111,7 @@ internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
         }
     }
 
-    internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken)
+    internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken = default)
     {
         var start = DateTimeOffset.UtcNow;
         var lockName = options.LockName!;

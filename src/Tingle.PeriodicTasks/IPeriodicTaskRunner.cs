@@ -7,7 +7,7 @@ public interface IPeriodicTaskRunner
     /// <param name="name">Name of the task.</param>
     /// <param name="cancellationToken">A token to cancel execution.</param>
     /// <returns></returns>
-    Task RunAsync(string name, CancellationToken cancellationToken);
+    Task RunAsync(string name, CancellationToken cancellationToken = default);
 
     /// <summary>Execute the task once.</summary>
     /// <param name="name">Name of the task.</param>
@@ -17,7 +17,7 @@ public interface IPeriodicTaskRunner
     /// Use this method if your application needs to execute the task
     /// before the next schedule is reached or if the task is disabled.
     /// </remarks>
-    Task ExecuteAsync(string name, CancellationToken cancellationToken);
+    Task ExecuteAsync(string name, CancellationToken cancellationToken = default);
 
     /// <summary>Execute the task once.</summary>
     /// <param name="name">Name of the task.</param>
@@ -28,7 +28,7 @@ public interface IPeriodicTaskRunner
     /// Use this method if your application needs to execute the task
     /// before the next schedule is reached or if the task is disabled.
     /// </remarks>
-    Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken);
+    Task ExecuteAsync(string name, bool throwOnError, CancellationToken cancellationToken = default);
 }
 
 /// <summary>A periodic task runner tasks of <typeparamref name="TTask"/> type.</summary>
