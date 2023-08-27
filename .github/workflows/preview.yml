@@ -15,8 +15,6 @@ on:
         description: 'Whether to publish to the public NuGet feed'
         required: false
         default: 'false'
-  schedule:
-  - cron: '0 1 * * *'
 
 env:
   buildConfiguration: 'Release'
