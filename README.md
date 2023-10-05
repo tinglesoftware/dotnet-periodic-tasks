@@ -5,7 +5,7 @@
 [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
 [![license](https://img.shields.io/github/license/tinglesoftware/dotnet-periodic-tasks.svg?style=flat-square)](LICENSE)
 
-This repository contains the code for the `Tingle.PeriodicTasks` libraries. This project exists so as to simplify the amount of work required to add periodic tasks to .NET projects. The existing libraries seem to have numerous complexities in setup especially when it comes to the use of framework concepts like dependency inject and options configuration. At [Tingle Software](https://tingle.software), we use this for all our periodic tasks that is based on .NET. However, the other libraries have more features such as persistance and user interfaces which are not yet available here.
+This repository contains the code for the `Tingle.PeriodicTasks` libraries. This project exists to simplify the amount of work required to add periodic tasks to .NET projects. The existing libraries seem to have numerous complexities in setup especially when it comes to the use of framework concepts like dependency inject and options configuration. At [Tingle Software](https://tingle.software), we use this for all our periodic tasks that is based on .NET. However, the other libraries have more features such as persistence and user interfaces which are not yet available here.
 
 ## Packages
 
@@ -192,7 +192,7 @@ Next, update your application startup:
 + app.RunOrExecutePeriodicTaskAsync();
 ```
 
-A common practice is to build one application project for your AspNetCore application housing your periodic tasks but you need to run the database cleanup task in a separate process (e.g. a Kubernetes CronJob or Azure Container App Job). Offloading longer running or greedier tasks to a separate process, or just for easier visibility on sensitive ones is a good thing.
+A common practice is to build one application project for your AspNetCore application housing your periodic tasks, but you need to run the database cleanup task in a separate process (e.g. a Kubernetes CronJob or Azure Container App Job). Offloading longer running or greedier tasks to a separate process, or just for easier visibility on sensitive ones is a good thing.
 
 For Azure Container App Job, your bicep file would like:
 
