@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Endpoints for accessing periodic tasks built using Tingle.PeriodicTasks libraries</Description>
+    <Description>AspNetCore endpoints for accessing periodic tasks built using Tingle.PeriodicTasks</Description>
     <PackageTags>$(PackageTags);aspnetcore</PackageTags>
   </PropertyGroup>
 

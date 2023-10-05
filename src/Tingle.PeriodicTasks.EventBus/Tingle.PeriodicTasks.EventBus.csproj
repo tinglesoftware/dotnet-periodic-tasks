@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Support for triggering periodic tasks using events from Tingle.EventBus libraries</Description>
+    <Description>Support for triggering periodic tasks using events from Tingle.EventBus</Description>
     <PackageTags>$(PackageTags);eventbus</PackageTags>
   </PropertyGroup>
 
