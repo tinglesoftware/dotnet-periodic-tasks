@@ -1,7 +1,7 @@
 # Simplified periodic task scheduling for .NET
 
 ![Nuget](https://img.shields.io/nuget/dt/Tingle.PeriodicTasks)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tinglesoftware/dotnet-periodic-tasks/release.yml?branch=main&style=flat-square)
+[![GitHub Workflow Status](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml/badge.svg)](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml)
 [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
 [![license](https://img.shields.io/github/license/tinglesoftware/dotnet-periodic-tasks.svg?style=flat-square)](LICENSE)
 
