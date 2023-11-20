@@ -1,6 +1,6 @@
 # Simplified periodic task scheduling for .NET
 
-![Nuget](https://img.shields.io/nuget/dt/Tingle.PeriodicTasks)
+[![NuGet](https://img.shields.io/nuget/v/Tingle.PeriodicTasks.svg)](https://www.nuget.org/packages/Tingle.PeriodicTasks/)
 [![GitHub Workflow Status](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml/badge.svg)](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml)
 [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
 [![license](https://img.shields.io/github/license/tinglesoftware/dotnet-periodic-tasks.svg?style=flat-square)](LICENSE)
@@ -9,11 +9,11 @@ This repository contains the code for the `Tingle.PeriodicTasks` libraries. This
 
 ## Packages
 
-|Package|Version|Description|
-|--|--|--|
-|`Tingle.PeriodicTasks`|[![NuGet](https://img.shields.io/nuget/v/Tingle.PeriodicTasks.svg)](https://www.nuget.org/packages/Tingle.PeriodicTasks/)|Basic implementation of periodic tasks in .NET|
-|`Tingle.PeriodicTasks.AspNetCore`|[![NuGet](https://img.shields.io/nuget/v/Tingle.PeriodicTasks.AspNetCore.svg)](https://www.nuget.org/packages/Tingle.PeriodicTasks.AspNetCore/)|AspNetCore endpoints for managing periodic tasks.|
-|`Tingle.PeriodicTasks.EventBus`|[![NuGet](https://img.shields.io/nuget/v/Tingle.PeriodicTasks.EventBus.svg)](https://www.nuget.org/packages/Tingle.PeriodicTasks.EventBus/)|Support for triggering periodic tasks using events from [Tingle.EventBus](https://github.com/tinglesoftware/eventbus).|
+|Package|Description|
+|--|--|
+|[`Tingle.PeriodicTasks`](https://www.nuget.org/packages/Tingle.PeriodicTasks/)|Basic implementation of periodic tasks in .NET|
+|[`Tingle.PeriodicTasks.AspNetCore`](https://www.nuget.org/packages/Tingle.PeriodicTasks.AspNetCore/)|AspNetCore endpoints for managing periodic tasks.|
+|[`Tingle.PeriodicTasks.EventBus`](https://www.nuget.org/packages/Tingle.PeriodicTasks.EventBus/)|Support for triggering periodic tasks using events from [Tingle.EventBus](https://github.com/tinglesoftware/eventbus).|
 
 ## Documentation
 
