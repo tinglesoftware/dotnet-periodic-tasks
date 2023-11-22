@@ -12,6 +12,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
                                                                                            IPeriodicTaskIdGenerator idGenerator,
                                                                                            IOptionsMonitor<PeriodicTaskOptions> optionsMonitor,
                                                                                            IDistributedLockProvider lockProvider,
+                                                                                           IPeriodicTaskExecutionAttemptsStore attemptsStore,
                                                                                            IEnumerable<IPeriodicTaskEventSubscriber> subscribers,
                                                                                            ILogger<PeriodicTaskRunner<TTask>> logger) : IPeriodicTaskRunner<TTask>
     where TTask : class, IPeriodicTask
@@ -58,10 +59,10 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         }
     }
 
-    public Task ExecuteAsync(string name, CancellationToken cancellationToken = default)
+    public Task<PeriodicTaskExecutionAttempt?> ExecuteAsync(string name, CancellationToken cancellationToken = default)
         => ExecuteAsync(name: name, throwOnError: false, awaitExecution: null, cancellationToken: cancellationToken);
 
-    public async Task ExecuteAsync(string name, bool throwOnError, bool? awaitExecution, CancellationToken cancellationToken = default)
+    public async Task<PeriodicTaskExecutionAttempt?> ExecuteAsync(string name, bool throwOnError, bool? awaitExecution, CancellationToken cancellationToken = default)
     {
         var options = optionsMonitor.Get(name);
 
@@ -81,7 +82,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         {
             try
             {
-                await t.ConfigureAwait(false);
+                return await t.ConfigureAwait(false);
             }
             // catch exception for cancellation
             catch (TaskCanceledException)
@@ -93,9 +94,11 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
                 }
             }
         }
+
+        return null;
     }
 
-    internal async Task ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken = default)
+    internal async Task<PeriodicTaskExecutionAttempt?> ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken = default)
     {
         var start = DateTimeOffset.UtcNow;
         var lockName = options.LockName!;
@@ -108,7 +111,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         if (handle is null)
         {
             logger.UnableToAcquireDistributedLock(lockName, executionId);
-            return; // do not do anything else
+            return null; // do not do anything else
         }
         logger.AcquiredDistributedLock(lockName, executionId);
 
@@ -146,24 +149,34 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
 
         var end = DateTimeOffset.UtcNow;
 
+        // prepare attempt
+        var attempt = new PeriodicTaskExecutionAttempt
+        {
+            Id = executionId,
+            Name = name,
+            ApplicationName = environment.ApplicationName,
+            EnvironmentName = environment.EnvironmentName,
+            MachineName = Environment.MachineName,
+            Start = start,
+            End = end,
+            Successful = caught is null,
+            ExceptionMessage = caught?.Message,
+            ExceptionStackTrace = caught?.StackTrace,
+        };
+
+        // add attempt to store
+        try
+        {
+            await attemptsStore.AddAsync(attempt, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.ExceptionAddingToStore(ex, executionId);
+        }
+
         // notify subscribers
         if (subscribers.Count > 0)
         {
-            // prepare notification
-            var attempt = new PeriodicTaskExecutionAttempt
-            {
-                Id = executionId,
-                Name = name,
-                ApplicationName = environment.ApplicationName,
-                EnvironmentName = environment.EnvironmentName,
-                MachineName = Environment.MachineName,
-                Start = start,
-                End = end,
-                Successful = caught is null,
-                ExceptionMessage = caught?.Message,
-                ExceptionStackTrace = caught?.StackTrace,
-            };
-
             try
             {
                 foreach (var s in subscribers)
@@ -187,5 +200,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
                 TaskType = typeof(TTask),
             };
         }
+
+        return attempt;
     }
 }

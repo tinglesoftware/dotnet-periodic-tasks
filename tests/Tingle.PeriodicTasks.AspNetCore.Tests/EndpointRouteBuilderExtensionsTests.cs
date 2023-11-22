@@ -196,13 +196,21 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 });
             });
         using var server = new TestServer(builder);
-        var client = server.CreateClient();
+        using var scope = server.Services.CreateScope();
+        var provider = scope.ServiceProvider;
+        var attemptsStore = provider.GetRequiredService<IPeriodicTaskExecutionAttemptsStore>();
 
-        var content = new StringContent("{\"name\":\"dummy\"}", Encoding.UTF8, "application/json");
+        var client = server.CreateClient();
+        var content = new StringContent("{\"name\":\"dummy\",\"wait\":true}", Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/periodic-tasks/execute", content);
-        //var attempt = await response.Content.ReadFromJsonAsync<PeriodicTaskExecutionAttempt>();
-        //Assert.Null(attempt);
-        Assert.Equal(0, response.Content.Headers.ContentLength);
+        var attempt = await response.Content.ReadFromJsonAsync<PeriodicTaskExecutionAttempt>();
+        Assert.NotNull(attempt);
+        Assert.Equal("dummy", attempt.Name);
+        Assert.NotEqual(0, response.Content.Headers.ContentLength);
+
+        attempt = Assert.Single(await attemptsStore.GetAttemptsAsync());
+        Assert.Equal("dummy", attempt.Name);
+        Assert.True(attempt.Successful);
     }
 
     [PeriodicTaskSchedule("10,40 * * * *", "Africa/Nairobi")]
