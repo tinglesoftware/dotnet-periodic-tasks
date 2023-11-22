@@ -43,15 +43,16 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
 
         // bind using the inferred/formatted name
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
-        configuration.Bind(options);
+        PeriodicTaskConfigureOptions.PopulateFromConfiguration(configuration, options);
 
         // binding using short name is not done because it may result in duplicates
 
         // bind using the full type name
         configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
-        configuration.Bind(options);
+        PeriodicTaskConfigureOptions.PopulateFromConfiguration(configuration, options);
     }
 
+    /// <inheritdoc/>
     public void PostConfigure(string? name, PeriodicTaskOptions options)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
@@ -105,5 +106,19 @@ internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTas
         }
 
         return ValidateOptionsResult.Success;
+    }
+
+    internal static void PopulateFromConfiguration(IConfiguration config, PeriodicTaskOptions options)
+    {
+        if (config.TryGetValue(nameof(options.Enable), out var value)) options.Enable = bool.Parse(value);
+        if (config.TryGetValue(nameof(options.Description), out value)) options.Description = value;
+        if (config.TryGetValue(nameof(options.ExecuteOnStartup), out value)) options.ExecuteOnStartup = bool.Parse(value);
+        if (config.TryGetValue(nameof(options.Schedule), out value)) options.Schedule = value;
+        if (config.TryGetValue(nameof(options.Timezone), out value)) options.Timezone = value;
+        if (config.TryGetValue(nameof(options.LockTimeout), out value)) options.LockTimeout = TimeSpan.Parse(value);
+        if (config.TryGetValue(nameof(options.AwaitExecution), out value)) options.AwaitExecution = bool.Parse(value);
+        if (config.TryGetValue(nameof(options.Deadline), out value)) options.Deadline = TimeSpan.Parse(value);
+        if (config.TryGetValue(nameof(options.ExecutionIdFormat), out value)) options.ExecutionIdFormat = Enum.Parse<PeriodicTaskIdFormat>(value, ignoreCase: true);
+        if (config.TryGetValue(nameof(options.LockName), out value)) options.LockName = value;
     }
 }

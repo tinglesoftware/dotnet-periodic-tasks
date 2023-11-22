@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using System.Diagnostics.CodeAnalysis;
 using Tingle.PeriodicTasks.AspNetCore;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -9,12 +10,15 @@ namespace Microsoft.AspNetCore.Builder;
 /// </summary>
 public static class PeriodicTasksEndpointRouteBuilderExtensions
 {
+    internal const string MapEndpointTrimmerWarning = "This API may perform reflection on the supplied delegate and its parameters. These types may be trimmed if not directly referenced.";
+
     /// <summary>
     /// Maps incoming requests to the paths for periodic tasks.
     /// </summary>
     /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the routes to.</param>
     /// <param name="prefix">The path prefix for the endpoints exposed.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> for endpoints associated with periodic tasks.</returns>
+    [RequiresUnreferencedCode(MapEndpointTrimmerWarning)]
     public static IEndpointConventionBuilder MapPeriodicTasks(this IEndpointRouteBuilder endpoints, string prefix = "/periodic-tasks")
     {
         ArgumentNullException.ThrowIfNull(endpoints);

@@ -3,10 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Tingle.PeriodicTasks.Internal;
 
-internal class PeriodicTaskRunner<TTask> : IPeriodicTaskRunner<TTask>
+internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask> : IPeriodicTaskRunner<TTask>
     where TTask : class, IPeriodicTask
 {
     private readonly IServiceProvider serviceProvider;

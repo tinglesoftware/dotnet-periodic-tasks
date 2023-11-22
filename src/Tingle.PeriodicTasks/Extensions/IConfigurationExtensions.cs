@@ -24,4 +24,10 @@ public static class IConfigurationExtensions
         ArgumentNullException.ThrowIfNull(configuration);
         return (name = configuration["PERIODIC_TASK_NAME"] is string s ? s : null) is not null;
     }
+
+    internal static bool TryGetValue(this IConfiguration configuration, string key, [NotNullWhen(true)] out string? value)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        return (value = configuration[key] is string s ? s : null) is not null;
+    }
 }

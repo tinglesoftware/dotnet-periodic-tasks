@@ -43,7 +43,9 @@ internal class PeriodicTasksEndpointsHandler
 
         // make the runner type
         var genericRunnerType = typeof(IPeriodicTaskRunner<>);
+#pragma warning disable IL2075 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.
         var runnerType = genericRunnerType.MakeGenericType(type);
+#pragma warning restore IL2075 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.
         var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
 
         // execute

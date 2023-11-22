@@ -5,10 +5,10 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Deterministic>true</Deterministic>
-    <!--<IsPackable>true</IsPackable>-->
     <Company>Tingle Software</Company>
     <Authors>Tingle Software</Authors>
     <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
+    <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
   <PropertyGroup>
