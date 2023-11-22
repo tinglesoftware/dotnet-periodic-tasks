@@ -8,9 +8,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// A builder class for adding and configuring the Periodic Tasks in <see cref="IServiceCollection"/>.
 /// </summary>
-public class PeriodicTasksBuilder
+public partial class PeriodicTasksBuilder
 {
-    private static readonly Regex trimPattern = new("(Job|Task|JobTask|PeriodicTask)$", RegexOptions.Compiled);
+    private static readonly Regex trimPattern = GetTrimPattern();
 
     /// <summary>
     /// Creates an instance of <see cref="PeriodicTasksBuilder"/>.
@@ -153,4 +153,6 @@ public class PeriodicTasksBuilder
     }
 
     internal static string TrimCommonSuffixes(string untrimmed, bool trim) => trim ? trimPattern.Replace(untrimmed, "") : untrimmed;
+    [GeneratedRegex("(Job|Task|JobTask|PeriodicTask)$", RegexOptions.Compiled)]
+    private static partial Regex GetTrimPattern();
 }
