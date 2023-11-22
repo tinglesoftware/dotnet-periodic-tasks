@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.Internal;
+using Tingle.PeriodicTasks.Stores;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -27,7 +28,7 @@ public partial class PeriodicTasksBuilder
         // Register necessary services
         Services.AddSingleton<IPeriodicTasksConfigurationProvider, DefaultPeriodicTasksConfigurationProvider>();
         Services.AddSingleton<IPeriodicTaskIdGenerator, PeriodicTaskIdGenerator>();
-        Services.AddSingleton<IPeriodicTaskExecutionAttemptsStore, InMemoryPeriodicTaskExecutionAttemptsStore>();
+        UseNoOpAttemptsStore();
         Services.AddSingleton<PeriodicTaskRunnerCreator>();
         Services.AddHostedService<PeriodicTasksHost>();
     }
@@ -39,7 +40,7 @@ public partial class PeriodicTasksBuilder
 
     /// <summary>Configure options for the PeriodicTasks host.</summary>
     /// <param name="configure">An <see cref="Action"/> to further configure <see cref="PeriodicTasksHostOptions"/> instances.</param>
-    /// <returns></returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder Configure(Action<PeriodicTasksHostOptions> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
@@ -48,11 +49,37 @@ public partial class PeriodicTasksBuilder
         return this;
     }
 
+    /// <summary>
+    /// Use an instance of <see cref="IPeriodicTaskExecutionAttemptsStore"/> that does not perform any operations.
+    /// This is useful for scenarios where you have many executions and do not need to store any attempts, not even in memory.
+    /// This is the default.
+    /// </summary>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
+    public PeriodicTasksBuilder UseNoOpAttemptsStore() => UseAttemptStore<NoOpPeriodicTaskExecutionAttemptsStore>();
+
+    /// <summary>
+    /// Use an instance of <see cref="IPeriodicTaskExecutionAttemptsStore"/> that does not perform any operations.
+    /// This is useful for scenarios where you have many executions and do not need to store any attempts, not even in memory.
+    /// </summary>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
+    public PeriodicTasksBuilder UseInMemoryAttemptStore() => UseAttemptStore<InMemoryPeriodicTaskExecutionAttemptsStore>();
+
+    /// <summary>
+    /// Use an instance of <see cref="IPeriodicTaskExecutionAttemptsStore"/> that does not perform any operations.
+    /// This is useful for scenarios where you have many executions and do not need to store any attempts, not even in memory.
+    /// </summary>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
+    public PeriodicTasksBuilder UseAttemptStore<[DynamicallyAccessedMembers(TrimmingHelper.Store)] TStore>() where TStore : class, IPeriodicTaskExecutionAttemptsStore
+    {
+        Services.AddSingleton<IPeriodicTaskExecutionAttemptsStore, TStore>();
+        return this;
+    }
+
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="name">The name of the task.</param>
     /// <param name="configure">Used to configure the periodic task options.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(string name, Action<PeriodicTaskOptions> configure)
         where TTask : class, IPeriodicTask
     {
@@ -77,7 +104,7 @@ public partial class PeriodicTasksBuilder
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="name">The name of the task.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(string name) where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(name, options => { /* nothing to do */ });
@@ -87,7 +114,7 @@ public partial class PeriodicTasksBuilder
     /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="name">The name of the task.</param>
     /// <param name="schedule">The execution schedule.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(string name, CronSchedule schedule) where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(name, options => options.Schedule = schedule);
@@ -96,13 +123,13 @@ public partial class PeriodicTasksBuilder
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="configure">Used to configure the periodic task options.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(Action<PeriodicTaskOptions> configure) where TTask : class, IPeriodicTask
         => AddTask<TTask>(MakeName<TTask>(), configure);
 
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>() where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(MakeName<TTask>(), options => { /* nothing to do */ });
@@ -111,7 +138,7 @@ public partial class PeriodicTasksBuilder
     /// <summary>Add a period task.</summary>
     /// <typeparam name="TTask">The period task to execute.</typeparam>
     /// <param name="schedule">The execution schedule.</param>
-    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance used to run this task.</returns>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTask<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(CronSchedule schedule) where TTask : class, IPeriodicTask
     {
         return AddTask<TTask>(MakeName<TTask>(), options => options.Schedule = schedule);
@@ -124,6 +151,7 @@ public partial class PeriodicTasksBuilder
     /// This is only required if you need to override the default
     /// runner behaviour which is sufficient in most cases.
     /// </remarks>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask, [DynamicallyAccessedMembers(TrimmingHelper.Runner)] TRunner>()
         where TTask : class, IPeriodicTask
         where TRunner : class, IPeriodicTaskRunner<TTask>
@@ -139,6 +167,7 @@ public partial class PeriodicTasksBuilder
     /// This is only required if you need to override the default
     /// runner behaviour which is sufficient in most cases.
     /// </remarks>
+    /// <returns>The <see cref="PeriodicTasksBuilder"/> instance for further configuration.</returns>
     public PeriodicTasksBuilder AddTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(IPeriodicTaskRunner<TTask> runner)
         where TTask : class, IPeriodicTask
     {
