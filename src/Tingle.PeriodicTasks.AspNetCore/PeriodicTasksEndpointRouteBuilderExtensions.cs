@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System.Diagnostics.CodeAnalysis;
+using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.AspNetCore;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -26,13 +29,33 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
         var routeGroup = endpoints.MapGroup("");
 
-        routeGroup.MapGet("/registrations", (PeriodicTasksEndpointsHandler handler) => handler.List());
+        routeGroup.MapGet("/registrations", Ok<List<PeriodicTaskRegistration>> ([FromServices] PeriodicTasksDataProvider provider) => TypedResults.Ok(provider.GetRegistrations()));
 
-        routeGroup.MapGet("/registrations/{name}", (PeriodicTasksEndpointsHandler handler, string name) => handler.Get(name));
+        routeGroup.MapGet("/registrations/{name}", Ok<PeriodicTaskRegistration> ([FromServices] PeriodicTasksDataProvider provider, [FromRoute] string name) => TypedResults.Ok(provider.GetRegistration(name)));
 
-        routeGroup.MapGet("/registrations/{name}/history", (PeriodicTasksEndpointsHandler handler, string name) => handler.GetHistory(name));
+        routeGroup.MapGet("/registrations/{name}/history",
+                          Results<Ok<List<PeriodicTaskExecutionAttempt>>, ProblemHttpResult> ([FromServices] PeriodicTasksDataProvider provider, [FromRoute] string name) =>
+                          {
+                              var registration = provider.GetRegistration(name);
+                              if (registration is null) return RegistrationNotFound(name);
 
-        routeGroup.MapPost("/execute", (PeriodicTasksEndpointsHandler handler, HttpContext context, PeriodicTaskExecutionRequest request) => handler.ExecuteAsync(context, request));
+
+                              var attempts = new List<PeriodicTaskExecutionAttempt>(); // will have data once we have storage support
+                              return TypedResults.Ok(attempts);
+                          });
+
+        routeGroup.MapPost("/execute",
+                           async Task<Results<Ok<PeriodicTaskExecutionAttempt>, ProblemHttpResult>> ([FromServices] IServiceProvider serviceProvider,
+                                                                                                     [FromServices] PeriodicTasksDataProvider dataProvider,
+                                                                                                     [FromBody] PeriodicTaskExecutionRequest request) =>
+                           {
+                               var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
+                               var registration = dataProvider.GetRegistration(name);
+                               if (registration is null) return RegistrationNotFound(name);
+
+                               var attempt = await dataProvider.ExecuteAsync(serviceProvider, registration, request).ConfigureAwait(false);
+                               return TypedResults.Ok(attempt);
+                           });
 
         return new PeriodicTasksEndpointConventionBuilder(routeGroup);
     }
@@ -53,5 +76,12 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
         public void Add(Action<EndpointBuilder> convention) => InnerAsConventionBuilder.Add(convention);
         public void Finally(Action<EndpointBuilder> finallyConvention) => InnerAsConventionBuilder.Finally(finallyConvention);
+    }
+
+    private static ProblemHttpResult RegistrationNotFound(string name)
+    {
+        return TypedResults.Problem(title: "periodic_task_registration_not_found",
+                                    detail: $"No periodic task named '{name}' exists.",
+                                    statusCode: 400);
     }
 }

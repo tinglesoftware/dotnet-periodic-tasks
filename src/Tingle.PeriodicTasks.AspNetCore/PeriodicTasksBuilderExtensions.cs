@@ -30,7 +30,7 @@ public static class PeriodicTasksBuilderExtensions
         var services = builder.Services;
         services.TryAddSingleton<PeriodicTasksMarkerService>();
         services.Configure(configure);
-        services.AddScoped<PeriodicTasksEndpointsHandler>();
+        services.AddScoped<PeriodicTasksDataProvider>();
         services.AddHttpContextAccessor();
 
         return builder;
