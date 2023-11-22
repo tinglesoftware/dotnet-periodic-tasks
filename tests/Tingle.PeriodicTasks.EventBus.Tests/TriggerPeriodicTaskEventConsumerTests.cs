@@ -34,12 +34,13 @@ public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelpe
 
         using var scope = host.Services.CreateScope();
         var provider = scope.ServiceProvider;
+        var attemptsStore = provider.GetRequiredService<IPeriodicTaskExecutionAttemptsStore>();
+        var publisher = provider.GetRequiredService<IEventPublisher>();
         var harness = provider.GetRequiredService<InMemoryTestHarness>();
 
         await harness.StartAsync();
         try
         {
-            var publisher = provider.GetRequiredService<IEventPublisher>();
             var evt = new TriggerPeriodicTaskEvent
             {
                 Name = "dummy",
@@ -53,6 +54,10 @@ public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelpe
 
             var evt_ctx_con = Assert.IsType<EventContext<TriggerPeriodicTaskEvent>>(Assert.Single(harness.Consumed()));
             Assert.Equal(evt.Name, evt_ctx_con.Event.Name);
+
+            var attempt = Assert.Single(await attemptsStore.GetAttemptsAsync());
+            Assert.Equal(evt.Name, attempt.Name);
+            Assert.True(attempt.Successful);
         }
         finally
         {

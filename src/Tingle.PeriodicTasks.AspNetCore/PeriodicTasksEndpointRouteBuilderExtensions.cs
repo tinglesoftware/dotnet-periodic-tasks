@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.AspNetCore;
 
@@ -29,31 +30,38 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
 
         var routeGroup = endpoints.MapGroup("");
 
-        routeGroup.MapGet("/registrations", Ok<List<PeriodicTaskRegistration>> ([FromServices] PeriodicTasksDataProvider provider) => TypedResults.Ok(provider.GetRegistrations()));
+        routeGroup.MapGet("/registrations", Ok<List<PeriodicTaskRegistration>> ([FromServices] PeriodicTasksEndpointsHandler handler) => TypedResults.Ok(handler.GetRegistrations()));
 
-        routeGroup.MapGet("/registrations/{name}", Ok<PeriodicTaskRegistration> ([FromServices] PeriodicTasksDataProvider provider, [FromRoute] string name) => TypedResults.Ok(provider.GetRegistration(name)));
+        routeGroup.MapGet("/registrations/{name}", Ok<PeriodicTaskRegistration> ([FromServices] PeriodicTasksEndpointsHandler handler, [FromRoute] string name) => TypedResults.Ok(handler.GetRegistration(name)));
 
         routeGroup.MapGet("/registrations/{name}/history",
-                          Results<Ok<List<PeriodicTaskExecutionAttempt>>, ProblemHttpResult> ([FromServices] PeriodicTasksDataProvider provider, [FromRoute] string name) =>
+                          async Task<Results<Ok<IReadOnlyList<PeriodicTaskExecutionAttempt>>, ProblemHttpResult>> ([FromServices] IPeriodicTaskExecutionAttemptsStore attemptsStore,
+                                                                                                                   [FromServices] PeriodicTasksEndpointsHandler handler,
+                                                                                                                   HttpContext context,
+                                                                                                                   [FromRoute] string name) =>
                           {
-                              var registration = provider.GetRegistration(name);
+                              var registration = handler.GetRegistration(name);
                               if (registration is null) return RegistrationNotFound(name);
 
+                              name = registration.Name!;
 
-                              var attempts = new List<PeriodicTaskExecutionAttempt>(); // will have data once we have storage support
+                              var cancellationToken = context.RequestAborted;
+                              var attempts = await attemptsStore.GetAttemptsAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false);
                               return TypedResults.Ok(attempts);
                           });
 
         routeGroup.MapPost("/execute",
-                           async Task<Results<Ok<PeriodicTaskExecutionAttempt>, ProblemHttpResult>> ([FromServices] IServiceProvider serviceProvider,
-                                                                                                     [FromServices] PeriodicTasksDataProvider dataProvider,
+                           async Task<Results<Ok<PeriodicTaskExecutionAttempt>, ProblemHttpResult>> ([FromServices] IServiceProvider provider,
+                                                                                                     [FromServices] PeriodicTasksEndpointsHandler handler,
+                                                                                                     HttpContext context,
                                                                                                      [FromBody] PeriodicTaskExecutionRequest request) =>
                            {
                                var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
-                               var registration = dataProvider.GetRegistration(name);
+                               var registration = handler.GetRegistration(name);
                                if (registration is null) return RegistrationNotFound(name);
 
-                               var attempt = await dataProvider.ExecuteAsync(serviceProvider, registration, request).ConfigureAwait(false);
+                               var cancellationToken = context.RequestAborted;
+                               var attempt = await handler.ExecuteAsync(provider, registration, request, cancellationToken).ConfigureAwait(false);
                                return TypedResults.Ok(attempt);
                            });
 

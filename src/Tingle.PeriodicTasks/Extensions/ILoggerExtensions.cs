@@ -38,5 +38,8 @@ internal static partial class ILoggerExtensions
     [LoggerMessage(209, LogLevel.Debug, "Distributed lock '{LockName}' acquired for '{ExecutionId}'")]
     public static partial void AcquiredDistributedLock(this ILogger logger, string lockName, string executionId);
 
+    [LoggerMessage(210, LogLevel.Error, "Exception adding '{ExecutionId}' to store")]
+    public static partial void ExceptionAddingToStore(this ILogger logger, Exception exception, string executionId);
+
     #endregion
 }

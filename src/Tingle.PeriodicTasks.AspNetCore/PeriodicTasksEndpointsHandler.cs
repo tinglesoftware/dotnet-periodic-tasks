@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace Tingle.PeriodicTasks.AspNetCore;
 
-internal class PeriodicTasksDataProvider(IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
+internal class PeriodicTasksEndpointsHandler(IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
 {
     private readonly PeriodicTasksHostOptions hostOptions = hostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(hostOptionsAccessor));
 
@@ -25,16 +25,10 @@ internal class PeriodicTasksDataProvider(IOptions<PeriodicTasksHostOptions> host
         return GetRegistrations().SingleOrDefault(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
     }
 
-    public List<PeriodicTaskExecutionAttempt>? GetHistory(PeriodicTaskRegistration registration)
-    {
-        var attempts = new List<PeriodicTaskExecutionAttempt>(); // will have data once we have storage support
-        return attempts;
-    }
-
-    public async Task<PeriodicTaskExecutionAttempt> ExecuteAsync(IServiceProvider provider,
-                                                                    PeriodicTaskRegistration registration,
-                                                                    PeriodicTaskExecutionRequest request,
-                                                                    CancellationToken cancellationToken = default)
+    public async Task<PeriodicTaskExecutionAttempt?> ExecuteAsync(IServiceProvider provider,
+                                                                  PeriodicTaskRegistration registration,
+                                                                  PeriodicTaskExecutionRequest request,
+                                                                  CancellationToken cancellationToken = default)
     {
         // find the task type
         var name = registration.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
@@ -48,12 +42,9 @@ internal class PeriodicTasksDataProvider(IOptions<PeriodicTasksHostOptions> host
         var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
 
         // execute
-        await runner.ExecuteAsync(name: name,
-                                    throwOnError: request.Throw,
-                                    awaitExecution: request.Wait,
-                                    cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        PeriodicTaskExecutionAttempt? attempt = null; // when attempt is offered, use it
-        return attempt!;
+        return await runner.ExecuteAsync(name: name,
+                                         throwOnError: request.Throw,
+                                         awaitExecution: request.Wait,
+                                         cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }
