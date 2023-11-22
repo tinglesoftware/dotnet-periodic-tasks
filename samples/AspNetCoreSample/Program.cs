@@ -21,7 +21,7 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPeriodicTasks();
+app.MapGroup("/periodic-tasks").MapPeriodicTasks();
 
 await app.RunAsync();
 
