@@ -19,7 +19,13 @@ internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTas
     /// <inheritdoc/>
     public void Configure(PeriodicTasksHostOptions options)
     {
-        configurationProvider.Configuration.Bind(options);
+        var config = configurationProvider.Configuration;
+        if (config.TryGetValue(nameof(options.LockNamePrefix), out var value)) options.LockNamePrefix = value;
+        if (config.TryGetValue(nameof(options.DefaultSchedule), out value)) options.DefaultSchedule = value;
+        if (config.TryGetValue(nameof(options.DefaultTimezone), out value)) options.DefaultTimezone = value;
+        if (config.TryGetValue(nameof(options.DefaultLockTimeout), out value)) options.DefaultLockTimeout = TimeSpan.Parse(value);
+        if (config.TryGetValue(nameof(options.DefaultDeadline), out value)) options.DefaultDeadline = TimeSpan.Parse(value);
+        if (config.TryGetValue(nameof(options.DefaultExecutionIdFormat), out value)) options.DefaultExecutionIdFormat = Enum.Parse<PeriodicTaskIdFormat>(value, ignoreCase: true);
 
         // Set the default LockNamePrefix
         options.LockNamePrefix ??= environment.ApplicationName.ToLowerInvariant();

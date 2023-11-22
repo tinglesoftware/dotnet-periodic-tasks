@@ -1,4 +1,7 @@
-﻿namespace Tingle.PeriodicTasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using Tingle.PeriodicTasks.Internal;
+
+namespace Tingle.PeriodicTasks;
 
 /// <summary>A periodic task runner.</summary>
 public interface IPeriodicTaskRunner
@@ -37,7 +40,7 @@ public interface IPeriodicTaskRunner
 
 /// <summary>A periodic task runner tasks of <typeparamref name="TTask"/> type.</summary>
 /// <typeparam name="TTask">The type of task to be executed.</typeparam>
-public interface IPeriodicTaskRunner<TTask> : IPeriodicTaskRunner
+public interface IPeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask> : IPeriodicTaskRunner
 {
 
 }

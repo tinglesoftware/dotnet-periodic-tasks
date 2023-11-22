@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Polly;
+using System.Diagnostics.CodeAnalysis;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.Internal;
 
@@ -65,5 +66,5 @@ public class PeriodicTasksHostOptions
     /// <summary>The periodic tasks registered.</summary>
     public IReadOnlyDictionary<string, Type> Registrations => registrations;
 
-    internal void AddRegistration(string name, Type type) => registrations.Add(name, type);
+    internal void AddRegistration(string name, [DynamicallyAccessedMembers(TrimmingHelper.Task)] Type type) => registrations.Add(name, type);
 }
