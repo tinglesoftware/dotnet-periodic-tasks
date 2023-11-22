@@ -6,23 +6,12 @@ using Microsoft.Extensions.Options;
 namespace Tingle.PeriodicTasks.Internal;
 
 /// <summary>Host for <see cref="IPeriodicTaskRunner"/> instances.</summary>
-internal class PeriodicTasksHost : BackgroundService
+internal class PeriodicTasksHost(IServiceProvider serviceProvider,
+                         IHostApplicationLifetime lifetime,
+                         IOptions<PeriodicTasksHostOptions> optionsAccessor,
+                         ILogger<PeriodicTasksHost> logger) : BackgroundService
 {
-    private readonly IServiceProvider serviceProvider;
-    private readonly IHostApplicationLifetime lifetime;
-    private readonly PeriodicTasksHostOptions options;
-    private readonly ILogger logger;
-
-    public PeriodicTasksHost(IServiceProvider serviceProvider,
-                             IHostApplicationLifetime lifetime,
-                             IOptions<PeriodicTasksHostOptions> optionsAccessor,
-                             ILogger<PeriodicTasksHost> logger)
-    {
-        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        this.lifetime = lifetime ?? throw new ArgumentNullException(nameof(lifetime));
-        options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+    private readonly PeriodicTasksHostOptions options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

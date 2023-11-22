@@ -5,16 +5,12 @@ using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-internal class PeriodicTaskConfigureOptions : IConfigureNamedOptions<PeriodicTaskOptions>, IPostConfigureOptions<PeriodicTaskOptions>, IValidateOptions<PeriodicTaskOptions>
+internal class PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor,
+                                            IPeriodicTasksConfigurationProvider configurationProvider) : IConfigureNamedOptions<PeriodicTaskOptions>,
+                                                                                                         IPostConfigureOptions<PeriodicTaskOptions>,
+                                                                                                         IValidateOptions<PeriodicTaskOptions>
 {
-    private readonly PeriodicTasksHostOptions tasksHostOptions;
-    private readonly IPeriodicTasksConfigurationProvider configurationProvider;
-
-    public PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> tasksHostOptionsAccessor, IPeriodicTasksConfigurationProvider configurationProvider)
-    {
-        tasksHostOptions = tasksHostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(tasksHostOptionsAccessor));
-        this.configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
-    }
+    private readonly PeriodicTasksHostOptions tasksHostOptions = tasksHostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(tasksHostOptionsAccessor));
 
     /// <inheritdoc/>
     public void Configure(PeriodicTaskOptions options)

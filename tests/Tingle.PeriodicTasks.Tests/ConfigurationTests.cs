@@ -6,15 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace Tingle.PeriodicTasks.EventBus.Tests;
 
-public class ConfigurationTests
+public class ConfigurationTests(ITestOutputHelper outputHelper)
 {
-    private readonly ITestOutputHelper outputHelper;
-
-    public ConfigurationTests(ITestOutputHelper outputHelper)
-    {
-        this.outputHelper = outputHelper ?? throw new ArgumentNullException(nameof(outputHelper));
-    }
-
     [Fact]
     public void BindFromIConfiguration_Works()
     {

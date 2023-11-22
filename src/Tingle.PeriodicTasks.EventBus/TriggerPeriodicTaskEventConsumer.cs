@@ -5,18 +5,11 @@ using Tingle.EventBus;
 
 namespace Tingle.PeriodicTasks.EventBus;
 
-internal class TriggerPeriodicTaskEventConsumer : IEventConsumer<TriggerPeriodicTaskEvent>
+internal class TriggerPeriodicTaskEventConsumer(IServiceScopeFactory scopeFactory,
+                                                IOptions<PeriodicTasksHostOptions> optionsAccessor,
+                                                ILogger<TriggerPeriodicTaskEventConsumer> logger) : IEventConsumer<TriggerPeriodicTaskEvent>
 {
-    private readonly IServiceScopeFactory scopeFactory;
-    private readonly PeriodicTasksHostOptions options;
-    private readonly ILogger logger;
-
-    public TriggerPeriodicTaskEventConsumer(IServiceScopeFactory scopeFactory, IOptions<PeriodicTasksHostOptions> optionsAccessor, ILogger<TriggerPeriodicTaskEventConsumer> logger)
-    {
-        this.scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
-    }
+    private readonly PeriodicTasksHostOptions options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
 
     public async Task ConsumeAsync(EventContext<TriggerPeriodicTaskEvent> context, CancellationToken cancellationToken)
     {

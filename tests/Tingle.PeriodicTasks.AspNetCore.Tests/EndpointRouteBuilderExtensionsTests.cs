@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Tingle.PeriodicTasks.AspNetCore.Tests;
 
-public class EndpointRouteBuilderExtensionsTests
+public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
 {
     private static readonly PeriodicTaskRegistration registration = new()
     {
@@ -27,13 +27,6 @@ public class EndpointRouteBuilderExtensionsTests
         Timezone = "Africa/Nairobi",
         ExecutionIdFormat = PeriodicTaskIdFormat.GuidNoDashes,
     };
-
-    private readonly ITestOutputHelper outputHelper;
-
-    public EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
-    {
-        this.outputHelper = outputHelper ?? throw new ArgumentNullException(nameof(outputHelper));
-    }
 
     [Fact] // Matches based on '.Map'
     public async Task IgnoresRequestThatDoesNotMatchPath()
@@ -214,15 +207,8 @@ public class EndpointRouteBuilderExtensionsTests
 
     [PeriodicTaskSchedule("10,40 * * * *", "Africa/Nairobi")]
     [PeriodicTaskDescription("some description here")]
-    class DummyTask : IPeriodicTask
+    class DummyTask(ILogger<DummyTask> logger) : IPeriodicTask
     {
-        private readonly ILogger logger;
-
-        public DummyTask(ILogger<DummyTask> logger)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
         public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("This is a dummy task");
@@ -234,14 +220,9 @@ public class EndpointRouteBuilderExtensionsTests
     {
         public IDistributedLock CreateLock(string name) => new DummyDistributedLock(name);
 
-        private class DummyDistributedLock : IDistributedLock
+        private class DummyDistributedLock(string name) : IDistributedLock
         {
-            public DummyDistributedLock(string name)
-            {
-                Name = name;
-            }
-
-            public string Name { get; }
+            public string Name { get; } = name;
 
             public IDistributedSynchronizationHandle Acquire(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
                 => new DummyDistributedSynchronizationHandle();

@@ -36,15 +36,8 @@ var host = Host.CreateDefaultBuilder(args)
 
 await host.RunAsync();
 
-class DatabaseCleanerTask : IPeriodicTask
+class DatabaseCleanerTask(ILogger<DatabaseCleanerTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public DatabaseCleanerTask(ILogger<DatabaseCleanerTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Cleaned up old records from the database");
@@ -52,15 +45,8 @@ class DatabaseCleanerTask : IPeriodicTask
     }
 }
 
-class DnsCheckerTask : IPeriodicTask
+class DnsCheckerTask(ILogger<DnsCheckerTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public DnsCheckerTask(ILogger<DnsCheckerTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("All DNS records are fine");
@@ -68,15 +54,8 @@ class DnsCheckerTask : IPeriodicTask
     }
 }
 
-class PublisherService : BackgroundService
+class PublisherService(IEventPublisher publisher) : BackgroundService
 {
-    private readonly IEventPublisher publisher;
-
-    public PublisherService(IEventPublisher publisher)
-    {
-        this.publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Delay(TimeSpan.FromSeconds(2), stoppingToken); // wait for host to have started

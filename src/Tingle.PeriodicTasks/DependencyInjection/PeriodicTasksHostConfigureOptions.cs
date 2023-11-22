@@ -5,17 +5,9 @@ using Tingle.PeriodicTasks;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-internal class PeriodicTasksHostConfigureOptions : IConfigureOptions<PeriodicTasksHostOptions>, IValidateOptions<PeriodicTasksHostOptions>
+internal class PeriodicTasksHostConfigureOptions(IHostEnvironment environment, IPeriodicTasksConfigurationProvider configurationProvider) : IConfigureOptions<PeriodicTasksHostOptions>,
+                                                                                                                                            IValidateOptions<PeriodicTasksHostOptions>
 {
-    private readonly IHostEnvironment environment;
-    private readonly IPeriodicTasksConfigurationProvider configurationProvider;
-
-    public PeriodicTasksHostConfigureOptions(IHostEnvironment environment, IPeriodicTasksConfigurationProvider configurationProvider)
-    {
-        this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
-        this.configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
-    }
-
     /// <inheritdoc/>
     public void Configure(PeriodicTasksHostOptions options)
     {

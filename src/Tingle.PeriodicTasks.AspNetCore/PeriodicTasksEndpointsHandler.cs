@@ -4,16 +4,9 @@ using Microsoft.Extensions.Options;
 
 namespace Tingle.PeriodicTasks.AspNetCore;
 
-internal class PeriodicTasksEndpointsHandler
+internal class PeriodicTasksEndpointsHandler(IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
 {
-    private readonly PeriodicTasksHostOptions hostOptions;
-    private readonly IOptionsMonitor<PeriodicTaskOptions> optionsMonitor;
-
-    public PeriodicTasksEndpointsHandler(IOptions<PeriodicTasksHostOptions> hostOptionsAccessor, IOptionsMonitor<PeriodicTaskOptions> optionsMonitor)
-    {
-        this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
-        hostOptions = hostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(hostOptionsAccessor));
-    }
+    private readonly PeriodicTasksHostOptions hostOptions = hostOptionsAccessor?.Value ?? throw new ArgumentNullException(nameof(hostOptionsAccessor));
 
     public IResult List() => Results.Ok(GetRegistrations());
 

@@ -29,15 +29,8 @@ var host = Host.CreateDefaultBuilder(args)
 
 await host.RunAsync();
 
-class DatabaseCleanerTask : IPeriodicTask
+class DatabaseCleanerTask(ILogger<DatabaseCleanerTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public DatabaseCleanerTask(ILogger<DatabaseCleanerTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Cleaned up old records from the database");
@@ -45,15 +38,8 @@ class DatabaseCleanerTask : IPeriodicTask
     }
 }
 
-class DnsCheckerTask : IPeriodicTask
+class DnsCheckerTask(ILogger<DnsCheckerTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public DnsCheckerTask(ILogger<DnsCheckerTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("All DNS records are fine");

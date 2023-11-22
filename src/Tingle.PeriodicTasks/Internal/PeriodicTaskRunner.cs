@@ -7,33 +7,16 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Tingle.PeriodicTasks.Internal;
 
-internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask> : IPeriodicTaskRunner<TTask>
+internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(IServiceProvider serviceProvider,
+                                                                                           IHostEnvironment environment,
+                                                                                           IPeriodicTaskIdGenerator idGenerator,
+                                                                                           IOptionsMonitor<PeriodicTaskOptions> optionsMonitor,
+                                                                                           IDistributedLockProvider lockProvider,
+                                                                                           IEnumerable<IPeriodicTaskEventSubscriber> subscribers,
+                                                                                           ILogger<PeriodicTaskRunner<TTask>> logger) : IPeriodicTaskRunner<TTask>
     where TTask : class, IPeriodicTask
 {
-    private readonly IServiceProvider serviceProvider;
-    private readonly IHostEnvironment environment;
-    private readonly IPeriodicTaskIdGenerator idGenerator;
-    private readonly IOptionsMonitor<PeriodicTaskOptions> optionsMonitor;
-    private readonly IDistributedLockProvider lockProvider;
-    private readonly IList<IPeriodicTaskEventSubscriber> subscribers;
-    private readonly ILogger logger;
-
-    public PeriodicTaskRunner(IServiceProvider serviceProvider,
-                              IHostEnvironment environment,
-                              IPeriodicTaskIdGenerator idGenerator,
-                              IOptionsMonitor<PeriodicTaskOptions> optionsMonitor,
-                              IDistributedLockProvider lockProvider,
-                              IEnumerable<IPeriodicTaskEventSubscriber> subscribers,
-                              ILogger<PeriodicTaskRunner<TTask>> logger)
-    {
-        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
-        this.idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
-        this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
-        this.lockProvider = lockProvider ?? throw new ArgumentNullException(nameof(lockProvider));
-        this.subscribers = subscribers?.ToList() ?? throw new ArgumentNullException(nameof(subscribers));
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+    private readonly IList<IPeriodicTaskEventSubscriber> subscribers = subscribers?.ToList() ?? throw new ArgumentNullException(nameof(subscribers));
 
     public async Task RunAsync(string name, CancellationToken cancellationToken = default)
     {

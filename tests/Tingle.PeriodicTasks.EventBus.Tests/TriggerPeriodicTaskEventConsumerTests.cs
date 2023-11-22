@@ -7,15 +7,8 @@ using Tingle.EventBus.Transports.InMemory;
 
 namespace Tingle.PeriodicTasks.EventBus.Tests;
 
-public class TriggerPeriodicTaskEventConsumerTests
+public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelper)
 {
-    private readonly ITestOutputHelper outputHelper;
-
-    public TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelper)
-    {
-        this.outputHelper = outputHelper ?? throw new ArgumentNullException(nameof(outputHelper));
-    }
-
     [Fact]
     public async Task ConsumeAsyncWorks()
     {
@@ -67,15 +60,8 @@ public class TriggerPeriodicTaskEventConsumerTests
         }
     }
 
-    class DummyTask : IPeriodicTask
+    class DummyTask(ILogger<DummyTask> logger) : IPeriodicTask
     {
-        private readonly ILogger logger;
-
-        public DummyTask(ILogger<DummyTask> logger)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
         public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("This is a dummy task");
@@ -87,14 +73,9 @@ public class TriggerPeriodicTaskEventConsumerTests
     {
         public IDistributedLock CreateLock(string name) => new DummyDistributedLock(name);
 
-        private class DummyDistributedLock : IDistributedLock
+        private class DummyDistributedLock(string name) : IDistributedLock
         {
-            public DummyDistributedLock(string name)
-            {
-                Name = name;
-            }
-
-            public string Name { get; }
+            public string Name { get; } = name;
 
             public IDistributedSynchronizationHandle Acquire(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
                 => new DummyDistributedSynchronizationHandle();
