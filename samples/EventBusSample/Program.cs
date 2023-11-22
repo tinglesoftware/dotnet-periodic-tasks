@@ -10,7 +10,7 @@ var host = Host.CreateDefaultBuilder(args)
 
                    // register IDistributedLockProvider
                    var path = configuration.GetValue<string?>("DistributedLocking:FilePath")
-                              ?? Path.Combine(environment.ContentRootPath, "distributed-locks");
+                           ?? Path.Combine(environment.ContentRootPath, "distributed-locks");
                    services.AddSingleton<Medallion.Threading.IDistributedLockProvider>(provider =>
                    {
                        return new Medallion.Threading.FileSystem.FileDistributedSynchronizationProvider(Directory.CreateDirectory(path));

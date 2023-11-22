@@ -12,7 +12,6 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
                                                                                            IPeriodicTaskIdGenerator idGenerator,
                                                                                            IOptionsMonitor<PeriodicTaskOptions> optionsMonitor,
                                                                                            IDistributedLockProvider lockProvider,
-                                                                                           IPeriodicTaskExecutionAttemptsStore attemptsStore,
                                                                                            IEnumerable<IPeriodicTaskEventSubscriber> subscribers,
                                                                                            ILogger<PeriodicTaskRunner<TTask>> logger) : IPeriodicTaskRunner<TTask>
     where TTask : class, IPeriodicTask
@@ -118,13 +117,13 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         // create a cancellation token linking the one supplied and the one from the lock when lost.
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, handle.HandleLostToken);
 
+        using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        var provider = scope.ServiceProvider;
+
         // execute the periodic task
         Exception? caught = null;
         try
         {
-            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
-            var provider = scope.ServiceProvider;
-
             var task = ActivatorUtilities.GetServiceOrCreateInstance<TTask>(provider);
 
             var context = new PeriodicTaskExecutionContext(name, executionId) { TaskType = typeof(TTask), };
@@ -167,6 +166,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         // add attempt to store
         try
         {
+            var attemptsStore = provider.GetRequiredService<IPeriodicTaskExecutionAttemptsStore>();
             await attemptsStore.AddAsync(attempt, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)

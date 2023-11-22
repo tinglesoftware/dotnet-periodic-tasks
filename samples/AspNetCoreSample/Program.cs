@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // register IDistributedLockProvider
 var path = builder.Configuration.GetValue<string?>("DistributedLocking:FilePath")
-           ?? Path.Combine(builder.Environment.ContentRootPath, "distributed-locks");
+        ?? Path.Combine(builder.Environment.ContentRootPath, "distributed-locks");
 builder.Services.AddSingleton<Medallion.Threading.IDistributedLockProvider>(provider =>
 {
     return new Medallion.Threading.FileSystem.FileDistributedSynchronizationProvider(Directory.CreateDirectory(path));
@@ -25,15 +25,8 @@ app.MapGroup("/periodic-tasks").MapPeriodicTasks();
 
 await app.RunAsync();
 
-class CookingTask : IPeriodicTask
+class CookingTask(ILogger<CookingTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public CookingTask(ILogger<CookingTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("The food is ready to eat");
@@ -41,15 +34,8 @@ class CookingTask : IPeriodicTask
     }
 }
 
-class WashingTask : IPeriodicTask
+class WashingTask(ILogger<WashingTask> logger) : IPeriodicTask
 {
-    private readonly ILogger logger;
-
-    public WashingTask(ILogger<WashingTask> logger)
-    {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public async Task ExecuteAsync(PeriodicTaskExecutionContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("I will do the cleaning later. Have you eaten yet?");
