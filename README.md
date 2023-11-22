@@ -4,7 +4,7 @@
 ![Nuget](https://img.shields.io/nuget/dt/Tingle.PeriodicTasks)
 [![GitHub Workflow Status](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml/badge.svg)](https://github.com/tinglesoftware/dotnet-periodic-tasks/actions/workflows/release.yml)
 [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
-[![license](https://img.shields.io/github/license/tinglesoftware/dotnet-periodic-tasks.svg?style=flat-square)](LICENSE)
+[![license](https://img.shields.io/github/license/tinglesoftware/dotnet-periodic-tasks.svg)](LICENSE)
 
 This repository contains the code for the `Tingle.PeriodicTasks` libraries. This project exists to simplify the amount of work required to add periodic tasks to .NET projects. The existing libraries seem to have numerous complexities in setup especially when it comes to the use of framework concepts like dependency inject and options configuration. At [Tingle Software](https://tingle.software), we use this for all our periodic tasks that is based on .NET. However, the other libraries have more features such as persistence and user interfaces which are not yet available here.
 
