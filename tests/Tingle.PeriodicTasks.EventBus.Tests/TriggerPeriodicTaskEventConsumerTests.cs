@@ -20,6 +20,7 @@ public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelpe
                 services.AddPeriodicTasks(builder =>
                 {
                     builder.AddTask<DummyTask>();
+                    builder.UseInMemoryAttemptStore();
                 });
 
                 services.AddEventBus(builder =>

@@ -185,6 +185,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 {
                     builder.AddTask<DummyTask>();
                     builder.AddAspNetCore();
+                    builder.UseInMemoryAttemptStore();
                 });
             })
             .Configure(app =>

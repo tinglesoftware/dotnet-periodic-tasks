@@ -1,8 +1,12 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Tingle.PeriodicTasks.Internal;
+namespace Tingle.PeriodicTasks.Stores;
 
-internal class InMemoryPeriodicTaskExecutionAttemptsStore : IPeriodicTaskExecutionAttemptsStore
+/// <summary>
+/// An implementation of <see cref="IPeriodicTaskExecutionAttemptsStore"/> that stores attempts in memory.
+/// This is backed by <see cref="ConcurrentBag{T}"/>.
+/// </summary>
+public class InMemoryPeriodicTaskExecutionAttemptsStore : IPeriodicTaskExecutionAttemptsStore
 {
     private readonly ConcurrentBag<PeriodicTaskExecutionAttempt> attempts = [];
 
@@ -33,7 +37,7 @@ internal class InMemoryPeriodicTaskExecutionAttemptsStore : IPeriodicTaskExecuti
     /// <inheritdoc/>
     public Task<IReadOnlyList<PeriodicTaskExecutionAttempt>> GetSuccessfulAttemptsAsync(string name, int? count = null, CancellationToken cancellationToken = default)
     {
-        var attempts = this.attempts.ToList().Where(x => x.Name == name && x.Successful);
+        var attempts = this.attempts.ToList().Where(a => a.Name == name && a.Successful);
         if (count is int limit) attempts = attempts.Take(limit);
         return Task.FromResult<IReadOnlyList<PeriodicTaskExecutionAttempt>>(attempts.ToList());
     }
