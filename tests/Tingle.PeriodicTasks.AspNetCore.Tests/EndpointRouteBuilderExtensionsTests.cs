@@ -43,7 +43,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -68,7 +68,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -100,7 +100,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -131,7 +131,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -161,7 +161,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);
@@ -192,7 +192,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                 app.UseRouting();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapPeriodicTasks();
+                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
                 });
             });
         using var server = new TestServer(builder);

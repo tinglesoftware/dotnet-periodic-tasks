@@ -100,10 +100,10 @@ app.MapPeriodicTasks().RequireAuthorization("policy-name-here");
 
 Endpoints available:
 
-- `GET {prefix}/registrations`: list the registered periodic tasks
-- `GET {prefix}/registrations/{name}`: retrieve the registration of a given periodic task by name
-- `GET {prefix}/registrations/{name}/history`: retrieve the execution history of a given periodic task
-- `POST {prefix}/execute`: execute a periodic task
+- `GET /registrations`: list the registered periodic tasks
+- `GET /registrations/{name}`: retrieve the registration of a given periodic task by name
+- `GET /registrations/{name}/history`: retrieve the execution history of a given periodic task
+- `POST /execute`: execute a periodic task
 
   ```jsonc
   {
