@@ -35,9 +35,9 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
         routeGroup.MapGet("/registrations/{name}", Ok<PeriodicTaskRegistration> ([FromServices] PeriodicTasksEndpointsHandler handler, [FromRoute] string name) => TypedResults.Ok(handler.GetRegistration(name)));
 
         routeGroup.MapGet("/registrations/{name}/history",
-                          async Task<Results<Ok<IReadOnlyList<PeriodicTaskExecutionAttempt>>, ProblemHttpResult>> ([FromServices] IPeriodicTaskExecutionAttemptsStore attemptsStore,
+                          async Task<Results<Ok<IReadOnlyList<PeriodicTaskExecutionAttempt>>, ProblemHttpResult>> (HttpContext context,
+                                                                                                                   [FromServices] IPeriodicTaskExecutionAttemptsStore attemptsStore,
                                                                                                                    [FromServices] PeriodicTasksEndpointsHandler handler,
-                                                                                                                   HttpContext context,
                                                                                                                    [FromRoute] string name) =>
                           {
                               var registration = handler.GetRegistration(name);
@@ -51,9 +51,8 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
                           });
 
         routeGroup.MapPost("/execute",
-                           async Task<Results<Ok<PeriodicTaskExecutionAttempt>, ProblemHttpResult>> ([FromServices] IServiceProvider provider,
+                           async Task<Results<Ok<PeriodicTaskExecutionAttempt>, ProblemHttpResult>> (HttpContext context,
                                                                                                      [FromServices] PeriodicTasksEndpointsHandler handler,
-                                                                                                     HttpContext context,
                                                                                                      [FromBody] PeriodicTaskExecutionRequest request) =>
                            {
                                var name = request.Name ?? throw new InvalidOperationException("The name of the periodic task must be provided!");
@@ -61,7 +60,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
                                if (registration is null) return RegistrationNotFound(name);
 
                                var cancellationToken = context.RequestAborted;
-                               var attempt = await handler.ExecuteAsync(provider, registration, request, cancellationToken).ConfigureAwait(false);
+                               var attempt = await handler.ExecuteAsync(registration, request, cancellationToken).ConfigureAwait(false);
                                return TypedResults.Ok(attempt);
                            });
 

@@ -6,10 +6,10 @@ using Microsoft.Extensions.Options;
 namespace Tingle.PeriodicTasks.Internal;
 
 /// <summary>Host for <see cref="IPeriodicTaskRunner"/> instances.</summary>
-internal class PeriodicTasksHost(IServiceProvider serviceProvider,
-                         IHostApplicationLifetime lifetime,
-                         IOptions<PeriodicTasksHostOptions> optionsAccessor,
-                         ILogger<PeriodicTasksHost> logger) : BackgroundService
+internal class PeriodicTasksHost(IHostApplicationLifetime lifetime,
+                                 IOptions<PeriodicTasksHostOptions> optionsAccessor,
+                                 PeriodicTaskRunnerCreator creator,
+                                 ILogger<PeriodicTasksHost> logger) : BackgroundService
 {
     private readonly PeriodicTasksHostOptions options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
 
@@ -22,13 +22,11 @@ internal class PeriodicTasksHost(IServiceProvider serviceProvider,
         }
 
         // create the tasks
-        var genericRunnerType = typeof(IPeriodicTaskRunner<>);
         var tasks = new List<Task>();
         foreach (var registration in options.Registrations)
         {
             var (name, type) = registration;
-            var runnerType = genericRunnerType.MakeGenericType(type);
-            var runner = (IPeriodicTaskRunner)serviceProvider.GetRequiredService(runnerType);
+            var runner = creator.Create(type);
             tasks.Add(runner.RunAsync(name, stoppingToken));
         }
 

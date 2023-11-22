@@ -28,6 +28,7 @@ public partial class PeriodicTasksBuilder
         Services.AddSingleton<IPeriodicTasksConfigurationProvider, DefaultPeriodicTasksConfigurationProvider>();
         Services.AddSingleton<IPeriodicTaskIdGenerator, PeriodicTaskIdGenerator>();
         Services.AddSingleton<IPeriodicTaskExecutionAttemptsStore, InMemoryPeriodicTaskExecutionAttemptsStore>();
+        Services.AddSingleton<PeriodicTaskRunnerCreator>();
         Services.AddHostedService<PeriodicTasksHost>();
     }
 

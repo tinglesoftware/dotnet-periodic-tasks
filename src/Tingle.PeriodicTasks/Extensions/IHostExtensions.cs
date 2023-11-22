@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using Tingle.PeriodicTasks;
+using Tingle.PeriodicTasks.Internal;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -83,14 +83,9 @@ public static class IHostExtensions
         using var scope = host.Services.CreateScope();
         var provider = scope.ServiceProvider;
 
-        // find the task registration
-        var options = provider.GetRequiredService<IOptions<PeriodicTasksHostOptions>>().Value;
-        name = PeriodicTasksBuilder.TrimCommonSuffixes(name, true);
-        if (!options.Registrations.TryGetValue(name, out var type))
-        {
-            throw new InvalidOperationException($"A periodic task with the name '{name}' does not exist."
-                + $" Ensure you call services.AddPeriodicTasks(builder => builder.AddTask(...)) when configuring your host.");
-        }
+        // create the runner
+        var creator = provider.GetRequiredService<PeriodicTaskRunnerCreator>();
+        var runner = creator.Create(name);
 
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e)
@@ -99,12 +94,6 @@ public static class IHostExtensions
             cts.Cancel();
         };
 
-        var genericRunnerType = typeof(IPeriodicTaskRunner<>);
-        var runnerType = genericRunnerType.MakeGenericType(type);
-        var runner = (IPeriodicTaskRunner)provider.GetRequiredService(runnerType);
-        return runner.ExecuteAsync(name: name,
-                                   throwOnError: throwOnError,
-                                   awaitExecution: awaitExecution,
-                                   cancellationToken: cts.Token);
+        return runner.ExecuteAsync(name: name, throwOnError: throwOnError, awaitExecution: awaitExecution, cancellationToken: cts.Token);
     }
 }
