@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Builder;
 
 namespace Tingle.PeriodicTasks.AspNetCore;
 
-internal class PeriodicTaskExecutionRequest
+/// <summary>
+/// The request type for the "/execute" endpoint added by <see cref="PeriodicTasksEndpointRouteBuilderExtensions.MapPeriodicTasks"/>.
+/// </summary>
+public class PeriodicTaskExecutionRequest
 {
     /// <summary>
     /// The name of the registered task to execute.
     /// </summary>
-    [Required]
-    public string? Name { get; set; }
+    public required string Name { get; init; }
 
     /// <summary>
     /// Whether to await execution to complete.
