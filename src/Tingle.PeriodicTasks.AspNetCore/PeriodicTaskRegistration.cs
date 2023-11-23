@@ -1,35 +1,43 @@
 ﻿namespace Tingle.PeriodicTasks.AspNetCore;
 
-internal sealed record PeriodicTaskRegistration
+/// <summary>
+/// The data transfer object for the response typically found in "/registrations" and "/registrations/{name}" responses.
+/// </summary>
+public sealed record PeriodicTaskRegistration
 {
-    public PeriodicTaskRegistration() { }
+    /// <summary>Name of the periodic task.</summary>
+    public required string Name { get; init; }
 
-    public PeriodicTaskRegistration(string name, Type type, PeriodicTaskOptions options)
-    {
-        Name = name;
-        Type = type.FullName;
-        Description = options.Description;
-        Enable = options.Enable;
-        ExecuteOnStartup = options.ExecuteOnStartup;
-        Schedule = options.Schedule?.ToString();
-        Timezone = options.Timezone;
-        LockTimeout = options.LockTimeout;
-        AwaitExecution = options.AwaitExecution;
-        Deadline = options.Deadline;
-        ExecutionIdFormat = options.ExecutionIdFormat;
-        LockName = options.LockName;
-    }
+    /// <summary>Full name of the periodic task type.</summary>
+    public required string? Type { get; init; }
 
-    public string? Name { get; set; }
-    public string? Type { get; set; }
-    public string? Description { get; set; }
-    public bool Enable { get; set; }
-    public bool ExecuteOnStartup { get; set; }
-    public string? Schedule { get; set; }
-    public string? Timezone { get; set; }
-    public TimeSpan? LockTimeout { get; set; }
-    public bool AwaitExecution { get; set; }
-    public TimeSpan? Deadline { get; set; }
-    public PeriodicTaskIdFormat? ExecutionIdFormat { get; set; }
-    public string? LockName { get; set; }
+    /// <summary>Description of the periodic task.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Whether the periodic task is enabled.</summary>
+    public bool Enable { get; init; }
+
+    /// <summary>Whether the periodic task should be executed on startup.</summary>
+    public bool ExecuteOnStartup { get; init; }
+
+    /// <summary>Schedule for the periodic task.</summary>
+    public string? Schedule { get; init; }
+
+    /// <summary>Timezone for the periodic task.</summary>
+    public string? Timezone { get; init; }
+
+    /// <summary>Lock timeout for the periodic task.</summary>
+    public TimeSpan? LockTimeout { get; init; }
+
+    /// <summary>Whether to await execution to complete.</summary>
+    public bool AwaitExecution { get; init; }
+
+    /// <summary>Deadline for the periodic task.</summary>
+    public TimeSpan? Deadline { get; init; }
+
+    /// <summary>Execution ID format for the periodic task.</summary>
+    public PeriodicTaskIdFormat? ExecutionIdFormat { get; init; }
+
+    /// <summary>Lock name for the periodic task.</summary>
+    public string? LockName { get; init; }
 }

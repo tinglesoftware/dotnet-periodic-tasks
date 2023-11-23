@@ -15,7 +15,21 @@ internal class PeriodicTasksEndpointsHandler(PeriodicTaskRunnerCreator creator, 
         foreach (var (name, type) in registrations)
         {
             var options = optionsMonitor.Get(name);
-            results.Add(new PeriodicTaskRegistration(name, type, options));
+            results.Add(new()
+            {
+                Name = name,
+                Type = type.FullName,
+                Description = options.Description,
+                Enable = options.Enable,
+                ExecuteOnStartup = options.ExecuteOnStartup,
+                Schedule = options.Schedule?.ToString(),
+                Timezone = options.Timezone,
+                LockTimeout = options.LockTimeout,
+                AwaitExecution = options.AwaitExecution,
+                Deadline = options.Deadline,
+                ExecutionIdFormat = options.ExecutionIdFormat,
+                LockName = options.LockName,
+            });
         }
         return results;
     }

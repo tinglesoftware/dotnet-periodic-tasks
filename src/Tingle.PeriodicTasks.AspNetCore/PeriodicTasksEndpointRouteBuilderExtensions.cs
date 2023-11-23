@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using Tingle.PeriodicTasks;
 using Tingle.PeriodicTasks.AspNetCore;
 
@@ -43,7 +42,7 @@ public static class PeriodicTasksEndpointRouteBuilderExtensions
                               var registration = handler.GetRegistration(name);
                               if (registration is null) return RegistrationNotFound(name);
 
-                              name = registration.Name!;
+                              name = registration.Name;
 
                               var cancellationToken = context.RequestAborted;
                               var attempts = await attemptsStore.GetAttemptsAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false);
