@@ -26,7 +26,7 @@ var host = Host.CreateDefaultBuilder(args)
                        });
                        builder.AddTask<DnsCheckerTask>(o => o.Schedule = "*/5 * * * * *");
 
-                       builder.Services.AddScoped<IPeriodicTaskExecutionAttemptsStore, MyExecutionAttemptsStore>(); // replace the inbuilt one
+                       builder.UseAttemptStore<MyExecutionAttemptsStore>();
                    });
 
                    services.AddDbContext<MainDbContext>(options => options.UseInMemoryDatabase("sample"));
