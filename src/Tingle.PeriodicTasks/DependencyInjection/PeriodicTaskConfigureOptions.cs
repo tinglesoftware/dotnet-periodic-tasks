@@ -39,13 +39,13 @@ internal class PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> t
 
         // bind using the inferred/formatted name
         var configuration = configurationProvider.Configuration.GetSection($"Tasks:{name}");
-        PeriodicTaskConfigureOptions.PopulateFromConfiguration(configuration, options);
+        PopulateFromConfiguration(configuration, options);
 
         // binding using short name is not done because it may result in duplicates
 
         // bind using the full type name
         configuration = configurationProvider.Configuration.GetSection($"Tasks:{type.FullName}");
-        PeriodicTaskConfigureOptions.PopulateFromConfiguration(configuration, options);
+        PopulateFromConfiguration(configuration, options);
     }
 
     /// <inheritdoc/>
