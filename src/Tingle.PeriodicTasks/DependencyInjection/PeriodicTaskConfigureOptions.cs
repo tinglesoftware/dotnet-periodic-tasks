@@ -59,7 +59,7 @@ internal class PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> t
         options.LockTimeout ??= tasksHostOptions.DefaultLockTimeout;
         options.Deadline ??= tasksHostOptions.DefaultDeadline;
         options.ExecutionIdFormat ??= tasksHostOptions.DefaultExecutionIdFormat;
-        options.RetryPolicy ??= tasksHostOptions.DefaultRetryPolicy;
+        options.ResiliencePipeline ??= tasksHostOptions.DefaultResiliencePipeline;
     }
 
     /// <inheritdoc/>
