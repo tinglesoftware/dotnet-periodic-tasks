@@ -88,7 +88,7 @@ public class PeriodicTaskOptions
     public string? LockName { get; set; }
 
     /// <summary>
-    /// The retry policy to apply when executing the job.
+    /// The <see cref="Polly.ResiliencePipeline"/> to apply when executing the job.
     /// This is an outer wrapper around the
     /// <see cref="IPeriodicTask.ExecuteAsync(PeriodicTaskExecutionContext, CancellationToken)"/>
     /// method.
@@ -98,7 +98,7 @@ public class PeriodicTaskOptions
     /// </summary>
     /// <remarks>
     /// When a value is provided, the host may extend the duration of the distributed for the task
-    /// until the execution with retry policy completes successfully or not.
+    /// until the execution with this pipeline completes successfully or not.
     /// </remarks>
-    public AsyncPolicy? RetryPolicy { get; set; }
+    public ResiliencePipeline? ResiliencePipeline { get; set; }
 }

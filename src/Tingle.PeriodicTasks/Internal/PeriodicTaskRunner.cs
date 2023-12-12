@@ -128,12 +128,12 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
 
             var context = new PeriodicTaskExecutionContext(name, executionId) { TaskType = typeof(TTask), };
 
-            // Invoke handler method, with retry if specified
-            var retryPolicy = options.RetryPolicy;
-            if (retryPolicy != null)
+            // Invoke handler method, with resilience pipeline if specified
+            var resiliencePipeline = options.ResiliencePipeline;
+            if (resiliencePipeline != null)
             {
                 var contextData = new Dictionary<string, object> { ["context"] = context, };
-                await retryPolicy.ExecuteAsync((ctx, ct) => task.ExecuteAsync(context, cts.Token), contextData, cancellationToken).ConfigureAwait(false);
+                await resiliencePipeline.ExecuteAsync(async (ctx, ct) => await task.ExecuteAsync(context, cts.Token).ConfigureAwait(false), contextData, cancellationToken).ConfigureAwait(false);
             }
             else
             {

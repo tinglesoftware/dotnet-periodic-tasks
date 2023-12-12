@@ -22,11 +22,11 @@ public class PeriodicTasksHostOptions
     public string? LockNamePrefix { get; set; }
 
     /// <summary>
-    /// Optional default retry policy to use for periodic tasks where it is not specified.
-    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.RetryPolicy"/> option.
+    /// Optional default <see cref="ResiliencePipeline"/> to use for periodic tasks where it is not specified.
+    /// To specify a value per periodic task, use the <see cref="PeriodicTaskOptions.ResiliencePipeline"/> option.
     /// Defaults to <see langword="null"/>.
     /// </summary>
-    public AsyncPolicy? DefaultRetryPolicy { get; set; }
+    public ResiliencePipeline? DefaultResiliencePipeline { get; set; }
 
     /// <summary>
     /// Gets or sets the default <see cref="CronSchedule"/> to use for periodic tasks where it is not specified.
