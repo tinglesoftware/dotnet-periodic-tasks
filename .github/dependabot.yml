@@ -19,7 +19,7 @@ updates:
       patterns: ["Microsoft*"]
     system:
       patterns: ["System*"]
-    xuint:
+    xunit:
       patterns: ["Xunit*"]
   ignore:
   # Ignore patch updates for some packages
