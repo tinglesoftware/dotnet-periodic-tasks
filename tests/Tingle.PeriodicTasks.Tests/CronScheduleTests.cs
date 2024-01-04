@@ -21,7 +21,7 @@ public class CronScheduleTests
         Assert.All(values, exp =>
         {
             // Ensure format is matched first zero is millisecond
-            Assert.Matches(@"^0 [0-9]{1,2} \* \* \* \*$", exp);
+            Assert.Matches(@"^[0-9]{1,2} \* \* \* \*$", exp);
 
             // Ensure the next occurrence is less than 2 hours away
             var now = DateTimeOffset.UtcNow;
@@ -62,12 +62,12 @@ public class CronScheduleTests
         Assert.Throws<InvalidCastException>(() => Convert.ToInt64(value));
         Assert.Throws<InvalidCastException>(() => Convert.ToSByte(value));
         Assert.Throws<InvalidCastException>(() => Convert.ToSingle(value));
-        Assert.Equal("0 0 * * * *", Convert.ToString(value));
+        Assert.Equal("0 * * * *", Convert.ToString(value));
         Assert.Throws<InvalidCastException>(() => Convert.ToUInt16(value));
         Assert.Throws<InvalidCastException>(() => Convert.ToUInt32(value));
         Assert.Throws<InvalidCastException>(() => Convert.ToUInt64(value));
 
-        Assert.Equal("0 0 * * * *", ((IConvertible)value).ToType(typeof(string), null));
+        Assert.Equal("0 * * * *", ((IConvertible)value).ToType(typeof(string), null));
         Assert.Throws<InvalidCastException>(() => ((IConvertible)value).ToType(typeof(ulong), null));
     }
 }

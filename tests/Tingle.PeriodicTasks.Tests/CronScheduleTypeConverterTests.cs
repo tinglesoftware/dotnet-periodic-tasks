@@ -9,7 +9,7 @@ public class CronScheduleTypeConverterTests
     {
         var converter = TypeDescriptor.GetConverter(typeof(CronSchedule));
         Assert.NotNull(converter);
-        var expected = "0 10 14 * * *";
+        var expected = "10 14 * * *";
         var csb = new CronSchedule(expected);
         var actual = converter.ConvertToString(csb);
         Assert.Equal(expected, actual);
