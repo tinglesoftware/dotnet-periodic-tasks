@@ -22,7 +22,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         ExecuteOnStartup = false,
         LockName = (typeof(DummyTask).Assembly.GetName().Name + ":dummy").ToLower(),
         LockTimeout = TimeSpan.Zero,
-        Schedule = "0 10,40 * * * *",
+        Schedule = "10,40 * * * *",
         Deadline = TimeSpan.FromMinutes(59),
         Timezone = "Africa/Nairobi",
         ExecutionIdFormat = PeriodicTaskIdFormat.GuidNoDashes,
