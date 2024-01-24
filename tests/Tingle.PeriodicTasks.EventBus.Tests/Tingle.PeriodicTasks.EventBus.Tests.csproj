@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Tingle.EventBus.Transports.InMemory" Version="0.21.0" />
+    <PackageReference Include="Tingle.EventBus.Transports.InMemory" Version="0.21.1" />
   </ItemGroup>
 
   <ItemGroup>
