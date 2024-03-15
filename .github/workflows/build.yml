@@ -73,11 +73,12 @@ jobs:
         -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersion }}
         -p:VersionPrefix=${{ steps.gitversion.outputs.nuGetVersion }}
 
-    - name: Publish Artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         path: ${{ github.workspace }}/drop/*
         name: drop
+        retention-days: 1
 
   # TODO: remove support for Azure Artifacts once we have migrated all packages to GitHub Packages
   AzureArtifacts:
