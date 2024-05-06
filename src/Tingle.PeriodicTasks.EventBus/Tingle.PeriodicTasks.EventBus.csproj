@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tingle.EventBus" Version="0.21.1" />
+    <PackageReference Include="Tingle.EventBus" Version="0.21.2" />
   </ItemGroup>
 
   <ItemGroup>
