@@ -13,7 +13,7 @@ public class PeriodicTasksHostOptions
     /// Names must be case-insensitive because they are used to form lock names and the underlying distributed
     /// lock provider may not support case sensitivity.
     /// For example, using files for locks may fail because file names on Windows are case insensitive.
-    private readonly Dictionary<string, Type> registrations = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, PeriodicTaskTypeRegistration> registrations = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets or sets the prefix value for the lock names.
@@ -64,7 +64,21 @@ public class PeriodicTasksHostOptions
     public PeriodicTaskIdFormat DefaultExecutionIdFormat { get; set; } = PeriodicTaskIdFormat.GuidNoDashes;
 
     /// <summary>The periodic tasks registered.</summary>
-    public IReadOnlyDictionary<string, Type> Registrations => registrations;
+    public IReadOnlyDictionary<string, PeriodicTaskTypeRegistration> Registrations => registrations;
 
-    internal void AddRegistration(string name, [DynamicallyAccessedMembers(TrimmingHelper.Task)] Type type) => registrations.Add(name, type);
+    internal void AddRegistration<[DynamicallyAccessedMembers(TrimmingHelper.Task)] TTask>(string name)
+        => registrations.Add(name, new(typeof(TTask), typeof(IPeriodicTaskRunner<TTask>)));
+}
+
+/// <summary>Registration for a periodic task.</summary>
+public readonly record struct PeriodicTaskTypeRegistration([DynamicallyAccessedMembers(TrimmingHelper.Task)] Type Type, [DynamicallyAccessedMembers(TrimmingHelper.Task)] Type RunnerType)
+{
+    /// <summary>Deconstructs the registration into its parts.</summary>
+    /// <param name="type">The type of the periodic task.</param>
+    /// <param name="runnerType">The type of the runner for the periodic task.</param>
+    public void Deconstruct(out Type type, out Type runnerType)
+    {
+        type = Type;
+        runnerType = RunnerType;
+    }
 }

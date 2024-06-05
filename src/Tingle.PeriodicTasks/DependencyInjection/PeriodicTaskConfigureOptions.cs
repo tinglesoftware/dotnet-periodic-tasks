@@ -24,7 +24,7 @@ internal class PeriodicTaskConfigureOptions(IOptions<PeriodicTasksHostOptions> t
         ArgumentException.ThrowIfNullOrEmpty(name);
 
         // set schedule and timezone from Attribute
-        var type = tasksHostOptions.Registrations[name];
+        var (type, _) = tasksHostOptions.Registrations[name];
         var attrs = type.GetCustomAttributes(false);
         if (attrs.OfType<PeriodicTaskScheduleAttribute>().SingleOrDefault() is PeriodicTaskScheduleAttribute attrSchedule)
         {
