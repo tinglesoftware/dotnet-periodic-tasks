@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <WarningsAsErrors>$(WarningsAsErrors),IL2026</WarningsAsErrors>
+    <WarningsAsErrors>$(WarningsAsErrors),IL2026,IL3050</WarningsAsErrors>
   </PropertyGroup>
 
 </Project>
