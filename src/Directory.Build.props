@@ -8,7 +8,7 @@
     <Company>Tingle Software</Company>
     <Authors>Tingle Software</Authors>
     <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
-    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -13,14 +13,16 @@ namespace Microsoft.AspNetCore.Builder;
 /// </summary>
 public static class PeriodicTasksEndpointRouteBuilderExtensions
 {
-    internal const string MapEndpointTrimmerWarning = "This API may perform reflection on the supplied delegate and its parameters. These types may be trimmed if not directly referenced.";
+    private const string MapEndpointUnreferencedCodeWarning = "This API may perform reflection on the supplied delegate and its parameters. These types may be trimmed if not directly referenced.";
+    private const string MapEndpointDynamicCodeWarning = "This API may perform reflection on the supplied delegate and its parameters. These types may require generated code and aren't compatible with native AOT applications.";
 
     /// <summary>
     /// Maps incoming requests to the paths for periodic tasks.
     /// </summary>
     /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the routes to.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> for endpoints associated with periodic tasks.</returns>
-    [RequiresUnreferencedCode(MapEndpointTrimmerWarning)]
+    [RequiresUnreferencedCode(MapEndpointUnreferencedCodeWarning)]
+    [RequiresDynamicCode(MapEndpointDynamicCodeWarning)]
     public static IEndpointConventionBuilder MapPeriodicTasks(this IEndpointRouteBuilder endpoints)
     {
         ArgumentNullException.ThrowIfNull(endpoints);

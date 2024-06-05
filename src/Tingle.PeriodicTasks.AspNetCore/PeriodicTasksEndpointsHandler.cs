@@ -12,7 +12,7 @@ internal class PeriodicTasksEndpointsHandler(PeriodicTaskRunnerCreator creator, 
     {
         var registrations = hostOptions.Registrations;
         var results = new List<PeriodicTaskRegistration>();
-        foreach (var (name, type) in registrations)
+        foreach (var (name, (type, _)) in registrations)
         {
             var options = optionsMonitor.Get(name);
             results.Add(new()

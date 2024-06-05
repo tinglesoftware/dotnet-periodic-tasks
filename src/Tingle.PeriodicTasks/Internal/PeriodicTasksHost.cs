@@ -23,10 +23,9 @@ internal class PeriodicTasksHost(IHostApplicationLifetime lifetime,
 
         // create the tasks
         var tasks = new List<Task>();
-        foreach (var registration in options.Registrations)
+        foreach (var (name, registration) in options.Registrations)
         {
-            var (name, type) = registration;
-            var runner = creator.Create(type);
+            var runner = creator.Create(registration);
             tasks.Add(runner.RunAsync(name, stoppingToken));
         }
 

@@ -85,8 +85,6 @@ public partial class PeriodicTasksBuilder
     {
         ArgumentNullException.ThrowIfNull(configure);
 
-        var tt = typeof(TTask);
-
         Configure(opt =>
         {
             if (opt.Registrations.TryGetValue(name, out var r))
@@ -94,7 +92,7 @@ public partial class PeriodicTasksBuilder
                 throw new InvalidOperationException($"A task with the name '{name}' has already been registered. Names are case insensitive.");
             }
 
-            opt.AddRegistration(name, tt);
+            opt.AddRegistration<TTask>(name);
         });
 
         Services.Configure(name, configure);
