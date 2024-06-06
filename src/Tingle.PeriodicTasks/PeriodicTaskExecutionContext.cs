@@ -11,11 +11,13 @@ public class PeriodicTaskExecutionContext
     /// This value is different for tasks of the same type but multiple registrations.
     /// </param>
     /// <param name="executionId">Unique identifier of the execution.</param>
+    /// <param name="taskType">Periodic task type.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public PeriodicTaskExecutionContext(string name, string executionId)
+    public PeriodicTaskExecutionContext(string name, string executionId, Type taskType)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         ExecutionId = executionId ?? throw new ArgumentNullException(nameof(executionId));
+        TaskType = taskType ?? throw new ArgumentNullException(nameof(taskType));
     }
 
     /// <summary>
@@ -30,5 +32,5 @@ public class PeriodicTaskExecutionContext
     public string ExecutionId { get; }
 
     /// <summary>Periodic task type.</summary>
-    public Type? TaskType { get; init; }
+    public Type TaskType { get; }
 }

@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Tingle.PeriodicTasks.Diagnostics;
 
 namespace Tingle.PeriodicTasks.Internal;
 
@@ -65,13 +67,26 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
     {
         var options = optionsMonitor.Get(name);
 
+        // Instrumentation
+        using var activity = PeriodicTasksActivitySource.StartActivity(ActivityNames.Execute, ActivityKind.Consumer);
+        if (activity is not null)
+        {
+            activity.DisplayName = $"Periodic Task: {name}";
+            activity.AddTag(ActivityTagNames.PeriodicTaskName, name);
+            activity.AddTag(ActivityTagNames.PeriodicTaskType, typeof(TTask).FullName);
+            activity.AddTag(ActivityTagNames.PeriodicTaskSchedule, options.Schedule!.ToString());
+            activity.AddTag(ActivityTagNames.PeriodicTaskTimezone, TimeZoneInfo.FindSystemTimeZoneById(options.Timezone!).Id);
+            activity.AddTag(ActivityTagNames.PeriodicTaskDeadline, options.Deadline!.ToString());
+        }
+
         // create linked CancellationTokenSource and attach deadline if not null
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cts.CancelAfter(options.Deadline!.Value);
 
         // execute the task
         var id = idGenerator.Generate(name, options.ExecutionIdFormat!.Value);
-        var t = ExecuteInnerAsync(executionId: id,
+        var t = ExecuteInnerAsync(activity: activity,
+                                  executionId: id,
                                   name: name,
                                   options: options,
                                   throwOnError: throwOnError,
@@ -97,7 +112,7 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         return null;
     }
 
-    internal async Task<PeriodicTaskExecutionAttempt?> ExecuteInnerAsync(string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken = default)
+    internal async Task<PeriodicTaskExecutionAttempt?> ExecuteInnerAsync(Activity? activity, string executionId, string name, PeriodicTaskOptions options, bool throwOnError, CancellationToken cancellationToken = default)
     {
         var start = DateTimeOffset.UtcNow;
         var lockName = options.LockName!;
@@ -126,24 +141,37 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         {
             var task = ActivatorUtilities.GetServiceOrCreateInstance<TTask>(provider);
 
-            var context = new PeriodicTaskExecutionContext(name, executionId) { TaskType = typeof(TTask), };
+            var context = new PeriodicTaskExecutionContext(name, executionId, typeof(TTask));
 
             // Invoke handler method, with resilience pipeline if specified
             var resiliencePipeline = options.ResiliencePipeline;
-            if (resiliencePipeline != null)
+            if (resiliencePipeline is not null)
             {
                 var contextData = new Dictionary<string, object> { ["context"] = context, };
-                await resiliencePipeline.ExecuteAsync(async (ctx, ct) => await task.ExecuteAsync(context, cts.Token).ConfigureAwait(false), contextData, cancellationToken).ConfigureAwait(false);
+                var attemptNumber = 0;
+                await resiliencePipeline.ExecuteAsync(
+                    async (ctx, ct) =>
+                    {
+                        attemptNumber++;
+                        await ExecuteTrackedAsync(task, context, attemptNumber, cts.Token).ConfigureAwait(false);
+                    },
+                    contextData,
+                    cancellationToken
+                ).ConfigureAwait(false);
             }
             else
             {
-                await task.ExecuteAsync(context, cts.Token).ConfigureAwait(false);
+                await ExecuteTrackedAsync(task, context, 1, cts.Token).ConfigureAwait(false);
             }
         }
         catch (Exception ex)
         {
             Interlocked.Exchange(ref caught, ex);
             logger.ExceptionInPeriodicTask(ex, executionId);
+
+            // record the exception in the activity and set the status to error
+            activity?.SetStatus(ActivityStatusCode.Error);
+            activity?.AddException(ex);
         }
 
         var end = DateTimeOffset.UtcNow;
@@ -202,5 +230,29 @@ internal class PeriodicTaskRunner<[DynamicallyAccessedMembers(TrimmingHelper.Tas
         }
 
         return attempt;
+    }
+
+    private async Task ExecuteTrackedAsync(IPeriodicTask task, PeriodicTaskExecutionContext context, int attemptNumber, CancellationToken cancellationToken)
+    {
+        using var activity = PeriodicTasksActivitySource.StartActivity(ActivityNames.ExecuteAttempt, ActivityKind.Consumer);
+        if (activity is not null)
+        {
+            activity.DisplayName = $"Periodic Task: {context.Name} (Attempt: {attemptNumber})";
+            activity.AddTag(ActivityTagNames.PeriodicTaskName, context.Name);
+            activity.AddTag(ActivityTagNames.PeriodicTaskType, typeof(TTask).FullName);
+            activity.AddTag(ActivityTagNames.PeriodicTaskAttemptNumber, attemptNumber);
+        }
+
+        try
+        {
+            await task.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
+            activity?.SetStatus(ActivityStatusCode.Ok);
+        }
+        catch (Exception ex)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error);
+            activity?.AddException(ex);
+            throw;
+        }
     }
 }
