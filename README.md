@@ -77,6 +77,15 @@ services.AddSingleton<Medallion.Threading.IDistributedLockProvider>(provider =>
 });
 ```
 
+### Instrumentation and observability
+
+This core library (`Tingle.PeriodicTasks`) is instrumented using `System.Diagnostics.Activity` and `System.Diagnostics.ActivitySource`.
+This makes it easy to use with OpenTelemetry by listening to the `Tingle.PeriodicTasks` activity source.
+
+```cs
+services.AddOpenTelemetry().WithTracing().AddSource("Tingle.PeriodicTasks");
+```
+
 ### Management via endpoints in AspNetCore
 
 You can choose to manage the periodic tasks in using endpoints in AspNetCore. Update your application setup as follows.
