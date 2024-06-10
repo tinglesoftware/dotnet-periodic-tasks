@@ -11,7 +11,7 @@ public static class EventBusBuilderExtensions
     /// <returns></returns>
     public static EventBusBuilder AddPeriodicTasksTrigger(this EventBusBuilder builder)
     {
-        return builder.AddConsumer<TriggerPeriodicTaskEventConsumer>();
+        return builder.AddConsumer<TriggerPeriodicTaskEvent, TriggerPeriodicTaskEventConsumer>();
     }
 
     /// <summary>Register the necessary services for triggering periodic tasks.</summary>
@@ -20,6 +20,6 @@ public static class EventBusBuilderExtensions
     /// <returns></returns>
     public static EventBusBuilder AddPeriodicTasksTrigger(this EventBusBuilder builder, Action<EventRegistration, EventConsumerRegistration> configure)
     {
-        return builder.AddConsumer<TriggerPeriodicTaskEventConsumer>(configure);
+        return builder.AddConsumer<TriggerPeriodicTaskEvent, TriggerPeriodicTaskEventConsumer>(configure);
     }
 }
