@@ -22,6 +22,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
   </PropertyGroup>
@@ -40,6 +41,7 @@
 
   <ItemGroup>
     <None Include="..\..\logo.png" Pack="True" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="True" PackagePath="\" />
   </ItemGroup>
 
 </Project>
