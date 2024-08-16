@@ -5,9 +5,8 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Deterministic>true</Deterministic>
-    <Company>Tingle Software</Company>
     <Authors>Tingle Software</Authors>
-    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
+    <Company>Tingle Software</Company>
     <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
@@ -22,7 +21,9 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
+    <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>$(PackageTags);periodic;tasks;cron;cronjob;scheduled</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,10 @@
       https://github.com/manuelroemer/IsExternalInit
     -->
     <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="True" PackagePath="\" />
   </ItemGroup>
 
 </Project>
