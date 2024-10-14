@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="Tingle.EventBus.Transports.InMemory" Version="0.22.1" />
   </ItemGroup>
 
