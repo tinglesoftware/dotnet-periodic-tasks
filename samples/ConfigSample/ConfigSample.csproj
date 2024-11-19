@@ -3,7 +3,7 @@
   <ItemGroup>
     <PackageReference Include="DistributedLock.Core" Version="1.0.7" />
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
