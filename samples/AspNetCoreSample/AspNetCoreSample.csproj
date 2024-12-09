@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <PackageReference Include="DistributedLock.Core" Version="1.0.7" />
+    <PackageReference Include="DistributedLock.Core" Version="1.0.8" />
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.2" />
   </ItemGroup>
 
