@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <ItemGroup>
-    <PackageReference Include="DistributedLock.Core" Version="1.0.7" />
+    <PackageReference Include="DistributedLock.Core" Version="1.0.8" />
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Tingle.EventBus.Transports.InMemory" Version="0.22.3" />
