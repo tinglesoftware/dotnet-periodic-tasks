@@ -12,8 +12,8 @@ public class CronScheduleTimerTests
             Interlocked.Increment(ref invocations);
             await t.StopAsync(ct);
         });
-        await timer.StartAsync();
-        await Task.Delay(TimeSpan.FromSeconds(7));
+        await timer.StartAsync(TestContext.Current.CancellationToken);
+        await Task.Delay(TimeSpan.FromSeconds(7), TestContext.Current.CancellationToken);
         Assert.Equal(1, invocations);
     }
 }

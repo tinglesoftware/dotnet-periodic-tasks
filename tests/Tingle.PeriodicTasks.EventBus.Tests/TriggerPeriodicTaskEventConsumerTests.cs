@@ -39,7 +39,7 @@ public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelpe
         var publisher = provider.GetRequiredService<IEventPublisher>();
         var harness = provider.GetRequiredService<InMemoryTestHarness>();
 
-        await harness.StartAsync();
+        await harness.StartAsync(TestContext.Current.CancellationToken);
         try
         {
             var evt = new TriggerPeriodicTaskEvent
@@ -49,20 +49,20 @@ public class TriggerPeriodicTaskEventConsumerTests(ITestOutputHelper outputHelpe
                 Wait = true,
             };
 
-            await publisher.PublishAsync(evt);
+            await publisher.PublishAsync(evt, cancellationToken: TestContext.Current.CancellationToken);
 
-            Assert.Empty(await harness.FailedAsync(TimeSpan.FromSeconds(3)));
+            Assert.Empty(await harness.FailedAsync(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken));
 
             var evt_ctx_con = Assert.IsType<EventContext<TriggerPeriodicTaskEvent>>(Assert.Single(harness.Consumed()));
             Assert.Equal(evt.Name, evt_ctx_con.Event.Name);
 
-            var attempt = Assert.Single(await attemptsStore.GetAttemptsAsync());
+            var attempt = Assert.Single(await attemptsStore.GetAttemptsAsync(cancellationToken: TestContext.Current.CancellationToken));
             Assert.Equal(evt.Name, attempt.Name);
             Assert.True(attempt.Successful);
         }
         finally
         {
-            await harness.StopAsync();
+            await harness.StopAsync(TestContext.Current.CancellationToken);
         }
     }
 

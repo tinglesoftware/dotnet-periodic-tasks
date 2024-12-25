@@ -49,7 +49,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         using var server = new TestServer(builder);
         var client = server.CreateClient();
 
-        var response = await client.GetAsync("/frob");
+        var response = await client.GetAsync("/frob", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -74,11 +74,11 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         using var server = new TestServer(builder);
         var client = server.CreateClient();
 
-        var response = await client.GetAsync("/PERIODIC-tasks/registrations");
+        var response = await client.GetAsync("/PERIODIC-tasks/registrations", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType!.ToString());
         Assert.NotEqual(0, response.Content.Headers.ContentLength);
-        Assert.Equal("[]", await response.Content.ReadAsStringAsync());
+        Assert.Equal("[]", await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         using var server = new TestServer(builder);
         var client = server.CreateClient();
 
-        var response = await client.GetFromJsonAsync<PeriodicTaskRegistration[]>("/periodic-tasks/registrations");
+        var response = await client.GetFromJsonAsync<PeriodicTaskRegistration[]>("/periodic-tasks/registrations", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
         var actual = Assert.Single(response);
         Assert.Equal(registration, actual);
@@ -137,7 +137,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         using var server = new TestServer(builder);
         var client = server.CreateClient();
 
-        var actual = await client.GetFromJsonAsync<PeriodicTaskRegistration>("/periodic-tasks/registrations/dummy");
+        var actual = await client.GetFromJsonAsync<PeriodicTaskRegistration>("/periodic-tasks/registrations/dummy", TestContext.Current.CancellationToken);
         Assert.NotNull(actual);
         Assert.Equal(registration, actual);
     }
@@ -167,7 +167,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
         using var server = new TestServer(builder);
         var client = server.CreateClient();
 
-        var response = await client.GetFromJsonAsync<PeriodicTaskExecutionAttempt[]>("/periodic-tasks/registrations/dummy/history");
+        var response = await client.GetFromJsonAsync<PeriodicTaskExecutionAttempt[]>("/periodic-tasks/registrations/dummy/history", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
         Assert.Empty(response);
     }
@@ -203,13 +203,13 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
 
         var client = server.CreateClient();
         var content = new StringContent("{\"name\":\"dummy\",\"wait\":true}", Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/periodic-tasks/execute", content);
-        var attempt = await response.Content.ReadFromJsonAsync<PeriodicTaskExecutionAttempt>();
+        var response = await client.PostAsync("/periodic-tasks/execute", content, TestContext.Current.CancellationToken);
+        var attempt = await response.Content.ReadFromJsonAsync<PeriodicTaskExecutionAttempt>(TestContext.Current.CancellationToken);
         Assert.NotNull(attempt);
         Assert.Equal("dummy", attempt.Name);
         Assert.NotEqual(0, response.Content.Headers.ContentLength);
 
-        attempt = Assert.Single(await attemptsStore.GetAttemptsAsync());
+        attempt = Assert.Single(await attemptsStore.GetAttemptsAsync(cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal("dummy", attempt.Name);
         Assert.True(attempt.Successful);
     }
