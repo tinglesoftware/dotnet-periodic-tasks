@@ -242,6 +242,7 @@ resource job 'Microsoft.App/jobs@2023-05-01' = {
 - [Triggering periodic tasks using Tingle.EventBus](./samples/EventBusSample)
 - [Save executions to a database using Entity Framework](./samples/EFCoreStoreSample)
 - [Add retries using Polly's Resilience Pipelines](./samples/ResilienceSample/)
+- [Publishing AOT](./samples/AotSample)
 
 ## Issues &amp; Comments
 
