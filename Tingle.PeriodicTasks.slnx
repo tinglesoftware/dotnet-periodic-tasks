@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <Project Path="src/Tingle.PeriodicTasks.AspNetCore/Tingle.PeriodicTasks.AspNetCore.csproj" />
+    <Project Path="src/Tingle.PeriodicTasks.EventBus/Tingle.PeriodicTasks.EventBus.csproj" />
+    <Project Path="src/Tingle.PeriodicTasks/Tingle.PeriodicTasks.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/Tingle.PeriodicTasks.AspNetCore.Tests/Tingle.PeriodicTasks.AspNetCore.Tests.csproj" />
+    <Project Path="tests/Tingle.PeriodicTasks.EventBus.Tests/Tingle.PeriodicTasks.EventBus.Tests.csproj" />
+    <Project Path="tests/Tingle.PeriodicTasks.Tests/Tingle.PeriodicTasks.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <File Path="samples/Directory.Build.props" />
+    <Project Path="samples/AspNetCoreSample/AspNetCoreSample.csproj" />
+    <Project Path="samples/ConfigSample/ConfigSample.csproj" />
+    <Project Path="samples/EFCoreStoreSample/EFCoreStoreSample.csproj" />
+    <Project Path="samples/EventBusSample/EventBusSample.csproj" />
+    <Project Path="samples/ResilienceSample/ResilienceSample.csproj" />
+    <Project Path="samples/SimpleSample/SimpleSample.csproj" />
+  </Folder>
+</Solution>
