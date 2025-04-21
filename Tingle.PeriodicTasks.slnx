@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/samples/">
     <File Path="samples/Directory.Build.props" />
+    <Project Path="samples/AotSample/AotSample.csproj" />
     <Project Path="samples/AspNetCoreSample/AspNetCoreSample.csproj" />
     <Project Path="samples/ConfigSample/ConfigSample.csproj" />
     <Project Path="samples/EFCoreStoreSample/EFCoreStoreSample.csproj" />

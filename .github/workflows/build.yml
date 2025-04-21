@@ -2,10 +2,8 @@ name: Build
 
 on:
   push:
-    # branches:
-    # - main
-    tags:
-    - '*'
+    # branches: [main]
+    tags: ['*']
     paths-ignore:
     - README.md
     - '**/README.md'
@@ -13,8 +11,7 @@ on:
     - CHANGELOG.md
     - docs/**
   pull_request:
-    branches:
-    - main
+    branches: [main]
     paths-ignore:
     - README.md
     - '**/README.md'
@@ -75,6 +72,15 @@ jobs:
         --no-build
         --output ${{ github.workspace }}/drop
         -p:PackageVersion=${{ steps.gitversion.outputs.fullSemVer }}
+
+    # this only exists to ensure we can actually publish AoT sample
+    - name: Validate AoT
+      working-directory: '${{ github.workspace}}/samples/AotSample'
+      run: >
+        dotnet publish
+        --configuration Release
+        --framework net9.0
+        --runtime linux-x64
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
