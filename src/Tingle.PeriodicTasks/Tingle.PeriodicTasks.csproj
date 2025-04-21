@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Basic implementation of periodic tasks in .NET.</Description>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cronos" Version="0.9.0" />
+    <PackageReference Include="Cronos" Version="0.10.0" />
     <PackageReference Include="DistributedLock.Core" Version="1.0.8" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
