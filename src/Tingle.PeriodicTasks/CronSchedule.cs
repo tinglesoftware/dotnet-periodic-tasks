@@ -1,5 +1,6 @@
 ﻿using Cronos;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Tingle.PeriodicTasks;
 
@@ -42,6 +43,29 @@ public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
     {
         var spaces = value.Count(c => c == ' ');
         return CronExpression.Parse(value, spaces == 5 ? CronFormat.IncludeSeconds : CronFormat.Standard);
+    }
+
+    ///<summary>
+    /// Constructs a new <see cref="CronSchedule"/> based on the specified cron expression.
+    /// </summary>
+    public static CronSchedule Parse(string value) => new(ParseExpression(value));
+
+    /// <summary>
+    /// Constructs a new <see cref="CronSchedule"/> based on the specified cron expression with the specified
+    /// A return value indicates whether the operation succeeded.
+    /// </summary>
+    public static bool TryParse(string? value, [NotNullWhen(true)] out CronSchedule? expression)
+    {
+        expression = null;
+        if (string.IsNullOrWhiteSpace(value)) return false;
+
+        var spaces = value.Count(c => c == ' ');
+        if (CronExpression.TryParse(value, spaces == 5 ? CronFormat.IncludeSeconds : CronFormat.Standard, out var result))
+        {
+            expression = new CronSchedule(result);
+            return true;
+        }
+        return false;
     }
 
     /// <inheritdoc/>
