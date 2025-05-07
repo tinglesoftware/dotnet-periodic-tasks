@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tingle.PeriodicTasks\Tingle.PeriodicTasks.csproj" />
+  </ItemGroup>
+
+</Project>

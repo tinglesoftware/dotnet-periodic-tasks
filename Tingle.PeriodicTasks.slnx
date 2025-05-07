@@ -20,5 +20,6 @@
     <Project Path="samples/EventBusSample/EventBusSample.csproj" />
     <Project Path="samples/ResilienceSample/ResilienceSample.csproj" />
     <Project Path="samples/SimpleSample/SimpleSample.csproj" />
+    <Project Path="samples/TimerSample/TimerSample.csproj" />
   </Folder>
 </Solution>

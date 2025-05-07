@@ -234,6 +234,15 @@ resource job 'Microsoft.App/jobs@2023-05-01' = {
 }
 ```
 
+## Low Level logic
+
+### `CronScheduleTimer`
+
+Sometimes, using DI is not necessary/sufficient and you want to control the logic yourself. In this case, you can use `CronScheduleTimer`. [Local sample](./samples/TimerSample), real-life example: <https://github.com/tinglesoftware/dependabot-azure-devops>.
+
+> [!IMPORTANT]
+> Using `CronScheduleTimer` you loose lots of features such as instrumentation and retries but you can add what suits you.
+
 ## Samples
 
 - [Simple sample setup](./samples/SimpleSample)
@@ -243,6 +252,7 @@ resource job 'Microsoft.App/jobs@2023-05-01' = {
 - [Save executions to a database using Entity Framework](./samples/EFCoreStoreSample)
 - [Add retries using Polly's Resilience Pipelines](./samples/ResilienceSample/)
 - [Publishing AOT](./samples/AotSample)
+- [Timer sample (advanced)](./samples/TimerSample)
 
 ## Issues &amp; Comments
 
