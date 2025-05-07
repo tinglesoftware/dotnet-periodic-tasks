@@ -234,11 +234,26 @@ resource job 'Microsoft.App/jobs@2023-05-01' = {
 }
 ```
 
+## Input Validation
+
+When accepting inputs for cron in your application you may want to validate the string. This can be done using `CronExpressionAttribute`.
+Example:
+
+```cs
+public class MyModelInput
+{
+  [CronExpression]
+  public string? Schedule { get; set; }
+}
+```
+
+Real-life usage: <https://github.com/tinglesoftware/dependabot-azure-devops/blob/7ae813d145520cada8a49a0b18e313fcf2cab727/server/Tingle.Dependabot/Models/Dependabot/DependabotConfiguration.cs#L122>
+
 ## Low Level logic
 
 ### `CronScheduleTimer`
 
-Sometimes, using DI is not necessary/sufficient and you want to control the logic yourself. In this case, you can use `CronScheduleTimer`. [Local sample](./samples/TimerSample), real-life example: <https://github.com/tinglesoftware/dependabot-azure-devops>.
+Sometimes, using DI is not necessary/sufficient and you want to control the logic yourself. In this case, you can use `CronScheduleTimer`. See [local sample](./samples/TimerSample) or [real-life usage](https://github.com/tinglesoftware/dependabot-azure-devops).
 
 > [!IMPORTANT]
 > Using `CronScheduleTimer` you loose lots of features such as instrumentation and retries but you can add what suits you.
