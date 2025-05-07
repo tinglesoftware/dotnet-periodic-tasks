@@ -1,4 +1,6 @@
-﻿namespace Tingle.PeriodicTasks.Tests;
+﻿using System.Text.Json;
+
+namespace Tingle.PeriodicTasks.Tests;
 
 public class CronScheduleTests
 {
@@ -69,5 +71,33 @@ public class CronScheduleTests
 
         Assert.Equal("0 * * * *", ((IConvertible)value).ToType(typeof(string), null));
         Assert.Throws<InvalidCastException>(() => ((IConvertible)value).ToType(typeof(ulong), null));
+    }
+
+    [Fact]
+    public void JsonConverter_Works()
+    {
+        var src_json = "{\"id\":\"0 * * * *\"}";
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+        var model = JsonSerializer.Deserialize<TestModel>(src_json, options);
+        var dst_json = JsonSerializer.Serialize(model, options);
+        Assert.Equal(src_json, dst_json);
+        Assert.Equal(CronSchedule.Parse("0 * * * *"), model!.Id);
+    }
+
+    [Fact]
+    public void JsonSerializerContext_Works()
+    {
+        var src_json = "{\"id\":\"0 * * * *\"}";
+        var model = JsonSerializer.Deserialize(src_json, TestJsonSerializerContext.Default.CronScheduleTests_TestModel)!;
+        var dst_json = JsonSerializer.Serialize(model, TestJsonSerializerContext.Default.CronScheduleTests_TestModel);
+        Assert.Equal(src_json, dst_json);
+    }
+
+    internal class TestModel
+    {
+        public CronSchedule? Id { get; set; }
     }
 }
