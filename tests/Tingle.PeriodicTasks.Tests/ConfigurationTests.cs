@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Tingle.PeriodicTasks.EventBus.Tests;
+namespace Tingle.PeriodicTasks.Tests;
 
 public class ConfigurationTests(ITestOutputHelper outputHelper)
 {
@@ -20,10 +20,10 @@ public class ConfigurationTests(ITestOutputHelper outputHelper)
                     ["PeriodicTasks:LockNamePrefix"] = "random_prefix",
                     ["PeriodicTasks:Tasks:dummy:Description"] = "some description here",
                     ["PeriodicTasks:Tasks:dummy:Timezone"] = "Africa/Nairobi",
-                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:AwaitExecution"] = "false",
-                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:Deadline"] = "00:15:00",
-                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:ExecutionIdFormat"] = "Long",
-                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.EventBus.Tests.ConfigurationTests+DummyTask:LockName"] = "stupid-lock",
+                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.Tests.ConfigurationTests+DummyTask:AwaitExecution"] = "false",
+                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.Tests.ConfigurationTests+DummyTask:Deadline"] = "00:15:00",
+                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.Tests.ConfigurationTests+DummyTask:ExecutionIdFormat"] = "Long",
+                    ["PeriodicTasks:Tasks:Tingle.PeriodicTasks.Tests.ConfigurationTests+DummyTask:LockName"] = "stupid-lock",
                 });
             })
             .ConfigureServices(services =>
