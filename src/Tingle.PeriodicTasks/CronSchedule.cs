@@ -1,10 +1,12 @@
 ﻿using Cronos;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Tingle.PeriodicTasks;
 
 /// <summary>Represents a CRON schedule.</summary>
+[JsonConverter(typeof(CronScheduleJsonConverter))]
 [TypeConverter(typeof(CronScheduleTypeConverter))]
 public readonly struct CronSchedule : IEquatable<CronSchedule>, IConvertible
 {
