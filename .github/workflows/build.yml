@@ -40,6 +40,9 @@ jobs:
       with:
         fetch-depth: 0 # Required for GitVersion
 
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v3
       with:
@@ -50,9 +53,6 @@ jobs:
       id: gitversion
       with:
         useConfigFile: true
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
 
     - name: Install dependencies
       run: dotnet restore
