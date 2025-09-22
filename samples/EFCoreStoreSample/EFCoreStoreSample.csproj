@@ -3,8 +3,8 @@
   <ItemGroup>
     <PackageReference Include="DistributedLock.Core" Version="1.0.8" />
     <PackageReference Include="DistributedLock.FileSystem" Version="1.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
