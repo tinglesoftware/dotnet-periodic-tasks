@@ -42,3 +42,10 @@ updates:
       # Ignore major updates for packages used in multi-targeting
       - dependency-name: 'Microsoft.AspNetCore.TestHost'
         update-types: ['version-update:semver-major']
+      # Ignore patch updates for some packages
+      - dependency-name: 'Microsoft.*'
+        update-types: ['version-update:semver-patch']
+      - dependency-name: 'System.*'
+        update-types: ['version-update:semver-patch']
+      - dependency-name: 'Xunit*'
+        update-types: ['version-update:semver-patch']
