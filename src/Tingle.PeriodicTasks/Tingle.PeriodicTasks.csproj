@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.8" />
-    <PackageReference Include="Polly.Core" Version="8.6.4" />
+    <PackageReference Include="Polly.Core" Version="8.6.5" />
   </ItemGroup>
 
 </Project>
