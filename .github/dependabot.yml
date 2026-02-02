@@ -8,22 +8,19 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '02:00'
 
   - package-ecosystem: 'devcontainers'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '02:00'
 
   - package-ecosystem: 'dotnet-sdk'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '02:00'
     ignore:
       # Ignore patch updates
@@ -33,8 +30,7 @@ updates:
   - package-ecosystem: 'nuget'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'monday'
+      interval: 'monthly'
       time: '02:00'
     open-pull-requests-limit: 10
     groups:
