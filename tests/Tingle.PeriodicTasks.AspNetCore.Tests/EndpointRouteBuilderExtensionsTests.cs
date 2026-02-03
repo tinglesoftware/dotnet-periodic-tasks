@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 
 namespace Tingle.PeriodicTasks.AspNetCore.Tests;
 
@@ -31,22 +32,29 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact] // Matches based on '.Map'
     public async Task IgnoresRequestThatDoesNotMatchPath()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
                 services.AddPeriodicTasks(builder => builder.AddAspNetCore());
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         var client = server.CreateClient();
 
         var response = await client.GetAsync("/frob", TestContext.Current.CancellationToken);
@@ -56,22 +64,29 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact] // Matches based on '.Map'
     public async Task MatchIsCaseInsensitive()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
                 services.AddRouting();
                 services.AddPeriodicTasks(builder => builder.AddAspNetCore());
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         var client = server.CreateClient();
 
         var response = await client.GetAsync("/PERIODIC-tasks/registrations", TestContext.Current.CancellationToken);
@@ -84,7 +99,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact]
     public async Task ListingWorks()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
@@ -95,15 +110,22 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                     builder.AddAspNetCore();
                 });
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         var client = server.CreateClient();
 
         var response = await client.GetFromJsonAsync<PeriodicTaskRegistration[]>("/periodic-tasks/registrations", TestContext.Current.CancellationToken);
@@ -115,7 +137,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact]
     public async Task GetWorks()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
@@ -126,15 +148,22 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                     builder.AddAspNetCore();
                 });
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         var client = server.CreateClient();
 
         var actual = await client.GetFromJsonAsync<PeriodicTaskRegistration>("/periodic-tasks/registrations/dummy", TestContext.Current.CancellationToken);
@@ -145,7 +174,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact]
     public async Task GetHistoryWorks()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
@@ -156,15 +185,22 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                     builder.AddAspNetCore();
                 });
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         var client = server.CreateClient();
 
         var response = await client.GetFromJsonAsync<PeriodicTaskExecutionAttempt[]>("/periodic-tasks/registrations/dummy/history", TestContext.Current.CancellationToken);
@@ -175,7 +211,7 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
     [Fact]
     public async Task ExecuteWorks()
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureLogging(builder => builder.AddXUnit(outputHelper))
             .ConfigureServices(services =>
             {
@@ -188,15 +224,22 @@ public class EndpointRouteBuilderExtensionsTests(ITestOutputHelper outputHelper)
                     builder.UseInMemoryAttemptStore();
                 });
             })
-            .Configure(app =>
+            .ConfigureWebHost(webHostBuilder =>
             {
-                app.UseRouting();
-                app.UseEndpoints(endpoints =>
+                webHostBuilder.UseTestServer();
+                webHostBuilder.Configure(app =>
                 {
-                    endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGroup("/periodic-tasks").MapPeriodicTasks();
+                    });
                 });
-            });
-        using var server = new TestServer(builder);
+            })
+            .Build();
+        await host.StartAsync(TestContext.Current.CancellationToken);
+
+        var server = host.GetTestServer();
         using var scope = server.Services.CreateScope();
         var provider = scope.ServiceProvider;
         var attemptsStore = provider.GetRequiredService<IPeriodicTaskExecutionAttemptsStore>();

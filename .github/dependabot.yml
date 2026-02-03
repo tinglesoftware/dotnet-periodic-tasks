@@ -22,17 +22,13 @@ updates:
     schedule:
       interval: 'monthly'
       time: '02:00'
-    ignore:
-      # Ignore patch updates
-      - dependency-name: '*'
-        update-types: ['version-update:semver-patch']
 
   - package-ecosystem: 'nuget'
     directory: '/'
     schedule:
       interval: 'monthly'
       time: '02:00'
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     groups:
       event-bus:
         patterns: ['Tingle.EventBus*']
@@ -42,14 +38,3 @@ updates:
         patterns: ['System*']
       xunit:
         patterns: ['Xunit*']
-    ignore:
-      # Ignore major updates for packages used in multi-targeting
-      - dependency-name: 'Microsoft.AspNetCore.TestHost'
-        update-types: ['version-update:semver-major']
-      # Ignore patch updates for some packages
-      - dependency-name: 'Microsoft.*'
-        update-types: ['version-update:semver-patch']
-      - dependency-name: 'System.*'
-        update-types: ['version-update:semver-patch']
-      - dependency-name: 'Xunit*'
-        update-types: ['version-update:semver-patch']
