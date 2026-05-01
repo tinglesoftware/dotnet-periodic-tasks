@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" PrivateAssets="All"/>
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="All"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +36,7 @@
       This packages is necessary to use Use C# 9's init and record features in in older target frameworks.
       https://github.com/manuelroemer/IsExternalInit
     -->
-    <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="All" />
+    <PackageReference Include="IsExternalInit" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

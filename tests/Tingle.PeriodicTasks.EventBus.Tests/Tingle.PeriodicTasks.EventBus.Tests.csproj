@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
-    <PackageReference Include="Tingle.EventBus.Transports.InMemory" Version="0.27.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Tingle.EventBus.Transports.InMemory" />
   </ItemGroup>
 
   <ItemGroup>
