@@ -1,10 +1,5 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="IsExternalInit" Version="1.0.3" />
-    <PackageVersion Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageVersion Include="Cronos" Version="0.13.0" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.9" />
     <PackageVersion Include="DistributedLock.FileSystem" Version="1.0.3" />
