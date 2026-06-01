@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="10.0.0" />
+    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="Cronos" Version="0.13.0" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.9" />
     <PackageVersion Include="DistributedLock.FileSystem" Version="1.0.3" />
